@@ -1,0 +1,3 @@
+/Users/survive/Desktop/Oswego Fall 2023/CSC 344/cmake-build-debug/CMakeFiles/CSC_344.dir
+/Users/survive/Desktop/Oswego Fall 2023/CSC 344/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/survive/Desktop/Oswego Fall 2023/CSC 344/cmake-build-debug/CMakeFiles/rebuild_cache.dir
