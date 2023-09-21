@@ -31,6 +31,7 @@ struct Instruction** instructionTable;
 struct TapeCell* createNewCell(char charValue);
 void addNext(char charValue);
 void initializeTable(char* input);
+void finalTape();
 
 
 int main() {
@@ -97,16 +98,14 @@ int main() {
         }
         else if (currentLine > 3) {
             char * input = buffer;
-            printf("%s", input);
             initializeTable(input);
         }
         currentLine++;
     } while (keepReading);
-
-
-    printf("%d %d %d ",numOfStates, startState, endState);
-
     fclose(fp);
+
+    //Start read and write
+
 
     //End of program
     return 0;
@@ -148,4 +147,12 @@ void initializeTable(char* input) {
     instructionTable[x][y].moveDirection = moveDirection;
     instructionTable[x][y].newState = newState;
 
+}
+
+void finalTape() {
+    while (head->next != NULL) {
+        struct TapeCell* temp = head;
+        printf("%c", temp->data);
+        temp = temp->next;
+    }
 }
