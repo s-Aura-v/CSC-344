@@ -8,6 +8,7 @@
 
 #define MAX_LINE 2048
 
+
 struct TapeCell {
     char data;
     struct TapeCell* prev;
@@ -15,11 +16,11 @@ struct TapeCell {
 };
 
 struct Instruction {
-     int currentState;
-     char readValue;
-     char writeValue;
-     char moveDirection; // 'L' for left, 'R' for right
-     int newState;
+    int currentState;
+    char readValue;
+    char writeValue;
+    char moveDirection; // 'L' for left, 'R' for right
+    int newState;
 };
 
 //Global variables
@@ -36,24 +37,28 @@ int main() {
     head = createNewCell('A');
 
     //Read for file name
-    char fileName[20];
-    printf("Input the name of the file: ");
-    scanf("%s", fileName);
+    char fileName[] = "input.txt";
+//    printf("Input the name of the file: ");
+//    scanf("%s", fileName);
 
     //Read the file and add it into an array
     FILE *fp;
-    fp = fopen(fileName, "r");
+    fp = fopen(fileName, "r"); //r = file is created for reading
     char *line;
-    line = malloc(sizeof (char * ) * 100);      //idk the size of the file
+    line = malloc(sizeof (char * ) * 100);
     (fgets(line, sizeof(line), fp) != NULL);      // f(gets): store, size, inputFile
 
-//    Create the tape
+    // Create the tape
     for (int i = 0; i < strlen(line); i++) {
         printf("%c", line[i]);
         addNext(line[i]);
     }
-    for (int i = 0; i < 9; i++) {
-        printf("%c", head[i].data);
+    printf("\n");
+
+    struct TapeCell* temp = head;
+    while (temp->next != NULL) {
+        printf("%d",temp->data);
+        temp = temp->next;
     }
 
     //Instruction Setup
@@ -62,14 +67,12 @@ int main() {
     int endState;
     char numTest[100];
 
-
     //Go through the files lines, set each variable to proper line
     char buffer[MAX_LINE];
     bool keepReading = true;
     int currentLine = 0;
 
     //Insert value to variables
-    struct Instruction** instructionTable;
     do
     {
         fgets(buffer, 20, fp); //add the text to, max line for array, file
@@ -85,21 +88,22 @@ int main() {
         else if (currentLine == 3) {
             endState = atoi(buffer);
         }
-        else if (currentLine > 3) {
-            char * input = buffer;
-            printf("%s", input);
-            initializeTable(input, instructionTable);
-        }
         currentLine++;
     } while (keepReading);
 
+
     printf("%d %d %d ",numOfStates, startState, endState);
+
     fclose(fp);
 
     //Create the 2d array of instructions
+    struct Instruction** instructionTable = (struct Instruction***)malloc(numOfStates * sizeof(struct Instruction**));
+    for (int i = 0; i < numOfStates; i++) {
+        instructionTable[i] = malloc(128 * sizeof(struct Instruction *));
+    }
+
 
     //End of program
-    free(line);
     return 0;
 
 }
@@ -124,7 +128,6 @@ void addNext(char charValue) {
     newCell->prev = temp;
 }
 
-
 void initializeTable(char* input, struct Instruction** instructionTable) {
     //Go through every line on the file and add it to the table
     //Separate the line by ->
@@ -144,4 +147,3 @@ void initializeTable(char* input, struct Instruction** instructionTable) {
     printf("x:%d - y:%d - cS:%d - nS:%d\n", x, y, currentState, newState);
 
 }
-
