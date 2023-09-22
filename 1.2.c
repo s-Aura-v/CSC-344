@@ -29,6 +29,7 @@ struct Instruction** instructionTable;
 
 //Functions
 struct TapeCell* createNewCell(char charValue);
+struct TapeCell* createBlankCell(struct TapeCell* tempCell);
 void addNext(char charValue);
 void initializeTable(char* input);
 void finalTape();
@@ -47,7 +48,7 @@ int main() {
     FILE *fp;
     fp = fopen(fileName, "r"); //r = file is created for reading
     char *line;
-    line = malloc(sizeof (char * ) * 100);
+    line = malloc(sizeof(char *) * 100);
     (fgets(line, sizeof(line), fp) != NULL);      // f(gets): store, size, inputFile
 
     // Create the tape
@@ -55,10 +56,10 @@ int main() {
         addNext(line[i]);
     }
 
-    struct TapeCell* temp = head;
+    struct TapeCell *temp = head;
     printf("Initial Tape: ");
     while (temp->next != NULL) {
-        printf("%c",temp->data);
+        printf("%c", temp->data);
         temp = temp->next;
     }
     printf("\n");
@@ -76,60 +77,52 @@ int main() {
     int currentLine = 0;
 
     //Insert value to variables
-    do
-    {
+    do {
         fgets(buffer, 20, fp); //add the text to, max line for array, file
         if (feof(fp)) {
             keepReading = false;
-        }
-        else if (currentLine == 1) {
+        } else if (currentLine == 1) {
             numOfStates = atoi(buffer); //cpy buffer to
-            instructionTable = (struct Instruction**)malloc(128 * sizeof(struct Instruction**));
-            for (int i = 0; i < 128; i++) {
+            instructionTable = (struct Instruction **) malloc(numOfStates * sizeof(struct Instruction **));
+            for (int i = 0; i < numOfStates; i++) {
                 instructionTable[i] = malloc(128 * sizeof(struct Instruction *));
             }
-        }
-        else if (currentLine == 2) {
+        } else if (currentLine == 2) {
             startState = atoi(buffer);
-        }
-        else if (currentLine == 3) {
+        } else if (currentLine == 3) {
             endState = atoi(buffer);
-        }
-        else if (currentLine > 3) {
-            char * input = buffer;
+        } else if (currentLine > 3) {
+            char *input = buffer;
             initializeTable(input);
         }
         currentLine++;
     } while (keepReading);
     fclose(fp);
 
+    //tests
+    printf("Line i: %c", line[0]);
+
+
     //Start read and write
-    bool isRunning = true;
-    while (isRunning) {
-
-        for (int i = 0; i < 128; i++) {
-            for (int j = 0; j < 128; j++) {
-
-                //read the state, value and search the instruction table
-
-                if (instructionTable[i][j].moveDirection == 'R') {
-
-                }
-
-
-
+    struct TapeCell *tempCell = head;
+    int tempState = startState;
+    while (startState != endState) {
+        //get the value from the instruction table
+        struct Instruction tempInstruct = instructionTable[tempState][tempCell->data];
+        tempCell->data = tempInstruct.writeValue;
+        if (tempInstruct.moveDirection == 'R') {
+            if (tempCell->next != NULL) {
+                tempCell = tempCell->next;
+            } else {
+                tempCell = createBlankCell(tempCell);
             }
 
-
-
-
+        } else if (tempInstruct.moveDirection == 'L') {
+            tempCell = tempCell->prev;
         }
-
-
-
-
-        isRunning = false;
+        tempState = tempInstruct.newState;
     }
+
 
 
     //Output:
@@ -148,6 +141,15 @@ struct TapeCell* createNewCell(char charValue) {
     return newCell;
 }
 
+struct TapeCell* createBlankCell(struct TapeCell* tempCell) {
+    struct TapeCell* newCell = (struct TapeCell*) malloc(sizeof (struct TapeCell));
+    newCell->data = 'B';
+    newCell->prev = tempCell;
+    newCell->next = NULL;
+    return newCell;
+
+}
+
 void addNext(char charValue) {
     //Create a temporary variable
     struct TapeCell* temp = head;
@@ -164,16 +166,17 @@ void initializeTable(char* input) {
     //Separate the line by ->
 
     //Copied the instructions
-    char x = input[1];
-    char y = input[3];
+    int currentState = input[1] - 48;  //48 is the value of 0 so get the int by subtracting it by 48
+    char readValue = input[3];
+    char writeValue = input[8];
     char moveDirection = input[10];
-    int currentState = input[8];
     int newState = input[12];
 
-    instructionTable[x][y].currentState = currentState;
-    instructionTable[x][y].moveDirection = moveDirection;
-    instructionTable[x][y].newState = newState;
-
+    instructionTable[currentState][readValue].currentState = currentState;
+    instructionTable[currentState][readValue].readValue = readValue;
+    instructionTable[currentState][readValue].moveDirection = moveDirection;
+    instructionTable[currentState][readValue].writeValue = writeValue;
+    instructionTable[currentState][readValue].newState = newState;
 }
 
 void finalTape() {
