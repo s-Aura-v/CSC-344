@@ -61,6 +61,12 @@ build CMakeFiles/CSC_344.dir/MacroProjectOne.c.o: C_COMPILER__CSC_344_unscanned_
   OBJECT_DIR = CMakeFiles/CSC_344.dir
   OBJECT_FILE_DIR = CMakeFiles/CSC_344.dir
 
+build CMakeFiles/CSC_344.dir/1.3.c.o: C_COMPILER__CSC_344_unscanned_Debug /Users/survive/Desktop/Oswego$ Fall$ 2023/CSC$ 344/1.3.c || cmake_object_order_depends_target_CSC_344
+  DEP_FILE = CMakeFiles/CSC_344.dir/1.3.c.o.d
+  FLAGS = -g -std=gnu11 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/CSC_344.dir
+  OBJECT_FILE_DIR = CMakeFiles/CSC_344.dir
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target CSC_344
@@ -69,7 +75,7 @@ build CMakeFiles/CSC_344.dir/MacroProjectOne.c.o: C_COMPILER__CSC_344_unscanned_
 #############################################
 # Link the static library libCSC_344.a
 
-build libCSC_344.a: C_STATIC_LIBRARY_LINKER__CSC_344_Debug CMakeFiles/CSC_344.dir/library.c.o CMakeFiles/CSC_344.dir/MacroProjectOne.c.o
+build libCSC_344.a: C_STATIC_LIBRARY_LINKER__CSC_344_Debug CMakeFiles/CSC_344.dir/library.c.o CMakeFiles/CSC_344.dir/MacroProjectOne.c.o CMakeFiles/CSC_344.dir/1.3.c.o
   ARCH_FLAGS = -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX13.3.sdk
   LANGUAGE_COMPILE_FLAGS = -g
   OBJECT_DIR = CMakeFiles/CSC_344.dir

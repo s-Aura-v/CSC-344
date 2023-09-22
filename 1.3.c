@@ -97,11 +97,10 @@ int main() {
     struct TapeCell *tempCell = head;
     int tempState = startState;
     while (tempState != endState) {
+    int i = 0;
         //get the value from the instruction table
-        struct Instruction tempInstruct;
-        tempInstruct = instructionTable[tempState][tempCell->data];
+        struct Instruction tempInstruct = instructionTable[tempState][tempCell->data];
         tempCell->data = tempInstruct.writeValue;
-
         if (tempInstruct.moveDirection == 'R') {
             if (tempCell->next != NULL) {
                 tempCell = tempCell->next;
@@ -111,15 +110,14 @@ int main() {
         } else if (tempInstruct.moveDirection == 'L') {
             tempCell = tempCell->prev;
         }
-
         tempState = tempInstruct.newState;
 
         //tests
-//        printf("%c", tempCell->data);
+        printf("%c", tempCell->data);
+        i++;
     }
 
     //Output:
-    printf("\n");
     finalTape();
     //End of program
     return 0;
@@ -160,36 +158,26 @@ void initializeTable(char* input) {
     //Separate the line by ->
 
     //Copied the instructions
-    int currentState = input[1] - 48;  //48 is the value of 0 so get the int by subtracting it by 48
-    char readValue = input[3];
-    char writeValue = input[8];
-    char moveDirection = input[10];
-    int newState = input[12] - 48;
 
-//    instructionTable[currentState]->newState = newState;
-//    instructionTable[currentState]->moveDirection = moveDirection;
-//
-    instructionTable[currentState]->currentState = currentState;
-    instructionTable[currentState]->readValue = readValue;
-    instructionTable[currentState]->moveDirection = moveDirection;
-    instructionTable[currentState]->writeValue = writeValue;
-    instructionTable[currentState]->newState = newState;
+//    int currentState = input[1] - 48;  //48 is the value of 0 so get the int by subtracting it by 48
+//    char readValue = input[3];
+//    char writeValue = input[8];
+//    char moveDirection = input[10];
+//    int newState = input[12] - 48;
+    int currentState;
+    char readValue;
+    char writeValue;
+    char moveDirection;
+    int newState;
 
+
+    sscanf(input, "(%d,%c)->(%c,%c,%d)", &currentState - 48, &readValue, &writeValue, &moveDirection,&newState - 48);
 
     instructionTable[currentState][readValue].currentState = currentState;
     instructionTable[currentState][readValue].readValue = readValue;
     instructionTable[currentState][readValue].moveDirection = moveDirection;
     instructionTable[currentState][readValue].writeValue = writeValue;
     instructionTable[currentState][readValue].newState = newState;
-
-    //Tests:
-    printf("CurrentState: %d | ReadValue: %c | WriteValue: %c\n", currentState, readValue, writeValue);
-    printf("Table at [%d][%c]: ", currentState,readValue);
-    printf("%d ", instructionTable[currentState][readValue].currentState);
-    printf("%c ", instructionTable[currentState][readValue].readValue);
-    printf("%c ", instructionTable[currentState][readValue].moveDirection);
-    printf("%c ", instructionTable[currentState][readValue].writeValue);
-    printf("%d\n", instructionTable[currentState][readValue].newState);
 }
 
 void finalTape() {

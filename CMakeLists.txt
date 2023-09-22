@@ -5,4 +5,5 @@ set(CMAKE_C_STANDARD 11)
 
 add_library(CSC_344 library.c
         MacroProjectOne.c
+        1.3.c
 )
