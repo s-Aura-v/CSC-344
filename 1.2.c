@@ -51,15 +51,14 @@ int main() {
     (fgets(line, sizeof(line), fp) != NULL);      // f(gets): store, size, inputFile
 
     // Create the tape
-    for (int i = 0; i < strlen(line); i++) {
-        printf("%c", line[i]);
+    for (int i = 0; i < strlen(line) + 1; i++) {
         addNext(line[i]);
     }
-    printf("\n");
 
     struct TapeCell* temp = head;
+    printf("Initial Tape: ");
     while (temp->next != NULL) {
-        printf("%d",temp->data);
+        printf("%c",temp->data);
         temp = temp->next;
     }
     printf("\n");
@@ -105,8 +104,36 @@ int main() {
     fclose(fp);
 
     //Start read and write
+    bool isRunning = true;
+    while (isRunning) {
+
+        for (int i = 0; i < 128; i++) {
+            for (int j = 0; j < 128; j++) {
+
+                //read the state, value and search the instruction table
+
+                if (instructionTable[i][j].moveDirection == 'R') {
+
+                }
 
 
+
+            }
+
+
+
+
+        }
+
+
+
+
+        isRunning = false;
+    }
+
+
+    //Output:
+    finalTape();
     //End of program
     return 0;
 
@@ -150,8 +177,9 @@ void initializeTable(char* input) {
 }
 
 void finalTape() {
-    while (head->next != NULL) {
-        struct TapeCell* temp = head;
+    struct TapeCell* temp = head;
+    printf("Final Tape: ");
+    while (temp->next != NULL) {
         printf("%c", temp->data);
         temp = temp->next;
     }
