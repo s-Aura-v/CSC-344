@@ -170,7 +170,7 @@ void initializeTable(char* input) {
     char readValue = input[3];
     char writeValue = input[8];
     char moveDirection = input[10];
-    int newState = input[12];
+    int newState = input[12] - 48;
 
     instructionTable[currentState][readValue].currentState = currentState;
     instructionTable[currentState][readValue].readValue = readValue;
