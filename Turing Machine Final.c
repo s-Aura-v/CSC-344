@@ -3,8 +3,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define MAX_LINE 2048
-
 struct TapeCell {
     char data;
     struct TapeCell* prev;
@@ -35,15 +33,15 @@ int main() {
     head = createNewCell('A');
 
     //Read for file name
-    char fileName[] = "input.txt";
-//    printf("Input the name of the file: ");
-//    scanf("%s", fileName);
+    char fileName[10];
+    printf("Input the name of the file: ");
+    scanf("%s", fileName);
 
     //Read the file and add it into an array
     FILE *fp;
     fp = fopen(fileName, "r"); //r = file is created for reading
     char *line;
-    line = malloc(sizeof(char *) * 100);
+    line = malloc(sizeof(char *) * 100);        //100 as I don't know the size
     (fgets(line, sizeof(line), fp) != NULL);      // f(gets): store, size, inputFile
 
     // Create the tape
@@ -57,8 +55,6 @@ int main() {
         printf("%c", temp->data);
         temp = temp->next;
     }
-    printf("\n");
-
 
     //Instruction Setup
     int numOfStates; //initialize it based on input
@@ -66,7 +62,7 @@ int main() {
     int endState;
 
     //Go through the files lines, set each variable to proper line
-    char buffer[MAX_LINE];
+    char buffer[1000];
     bool keepReading = true;
     int currentLine = 0;
 
@@ -101,7 +97,6 @@ int main() {
         struct Instruction tempInstruct;
         tempInstruct = instructionTable[tempState][tempCell->data];
         tempCell->data = tempInstruct.writeValue;
-
         if (tempInstruct.moveDirection == 'R') {
             if (tempCell->next != NULL) {
                 tempCell = tempCell->next;
@@ -111,21 +106,14 @@ int main() {
         } else if (tempInstruct.moveDirection == 'L') {
             tempCell = tempCell->prev;
         }
-
         tempState = tempInstruct.newState;
-
-        //tests
-//        printf("%c", tempCell->data);
     }
-
     //Output:
     printf("\n");
     finalTape();
     //End of program
     return 0;
-
 }
-
 
 struct TapeCell* createNewCell(char charValue) {
     struct TapeCell* newCell = (struct TapeCell*) malloc(sizeof (struct TapeCell));
@@ -156,9 +144,6 @@ void addNext(char charValue) {
 }
 
 void initializeTable(char* input) {
-    //Go through every line on the file and add it to the table
-    //Separate the line by ->
-
     //Copied the instructions
     int currentState = input[1] - 48;  //48 is the value of 0 so get the int by subtracting it by 48
     char readValue = input[3];
@@ -166,36 +151,23 @@ void initializeTable(char* input) {
     char moveDirection = input[10];
     int newState = input[12] - 48;
 
-//    instructionTable[currentState]->newState = newState;
-//    instructionTable[currentState]->moveDirection = moveDirection;
-//
+    //Initalize the table
     instructionTable[currentState]->currentState = currentState;
     instructionTable[currentState]->readValue = readValue;
     instructionTable[currentState]->moveDirection = moveDirection;
     instructionTable[currentState]->writeValue = writeValue;
     instructionTable[currentState]->newState = newState;
-
-
     instructionTable[currentState][readValue].currentState = currentState;
     instructionTable[currentState][readValue].readValue = readValue;
     instructionTable[currentState][readValue].moveDirection = moveDirection;
     instructionTable[currentState][readValue].writeValue = writeValue;
     instructionTable[currentState][readValue].newState = newState;
-
-    //Tests:
-    printf("CurrentState: %d | ReadValue: %c | WriteValue: %c\n", currentState, readValue, writeValue);
-    printf("Table at [%d][%c]: ", currentState,readValue);
-    printf("%d ", instructionTable[currentState][readValue].currentState);
-    printf("%c ", instructionTable[currentState][readValue].readValue);
-    printf("%c ", instructionTable[currentState][readValue].moveDirection);
-    printf("%c ", instructionTable[currentState][readValue].writeValue);
-    printf("%d\n", instructionTable[currentState][readValue].newState);
 }
 
 void finalTape() {
     struct TapeCell* temp = head;
     printf("Final Tape: ");
-    while (temp->next != NULL) {
+    while (temp != NULL) {
         printf("%c", temp->data);
         temp = temp->next;
     }
