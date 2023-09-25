@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="CMakeSettings">
     <configurations>
       <configuration PROFILE_NAME="Debug" ENABLED="true" CONFIG_NAME="Debug" />
@@ -7,57 +10,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c12a0cc8-7130-4edb-bafc-fa94edb529b7" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.1.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.1.dSYM/Contents/Info.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.1.dSYM/Contents/Resources/DWARF/1.1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.3.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.3.dSYM/Contents/Info.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/1.3.dSYM/Contents/Resources/DWARF/1.3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/CMakeLists.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MacroProjectOne" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MacroProjectOne.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MacroProjectOne.dSYM/Contents/Info.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MacroProjectOne.dSYM/Contents/Resources/DWARF/MacroProjectOne" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MicroProjectOne" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MicroProjectOne.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MicroProjectOne.dSYM/Contents/Info.plist" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/MicroProjectOne.dSYM/Contents/Resources/DWARF/MicroProjectOne" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/a.out" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/query/cache-v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/query/cmakeFiles-v1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/query/codemodel-v2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/query/toolchains-v1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/cache-v2-d822c4382a98ee5ebbdb.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/cmakeFiles-v1-7d5972eed2a41ada8d31.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/codemodel-v2-c6bc9cbf660c392b8f23.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/directory-.-Debug-f5ebdc15457944623624.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/index-2023-09-22T14-38-37-0205.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/target-CSC_344-Debug-db07eb8810c8a560661c.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/.cmake/api/v1/reply/toolchains-v1-5ca06af607b896ce7535.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeCache.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/3.26.4/CMakeCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/3.26.4/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/3.26.4/CMakeSystem.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/3.26.4/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/3.26.4/CompilerIdC/CMakeCCompilerId.o" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/CMakeConfigureLog.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/cmake.check_cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/CMakeFiles/rules.ninja" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/Testing/Temporary/LastTest.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/build.ninja" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/cmake-build-debug/cmake_install.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/input.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/library.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Previous Versions/library.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Turing Machine Final" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Turing Machine Final.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/clion-Debug-log.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../input.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Clojure/project2/src/project2/core.clj" beforeDir="false" afterPath="$PROJECT_DIR$/../Clojure/project2/src/project2/core.clj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,9 +24,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2Vr0cSTr5FSjeokB6XrDN5PXQFJ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -88,6 +42,10 @@
     "cidr.known.project.marker": "true",
     "git-widget-placeholder": "main",
     "last_opened_file_path": "/Users/survive/Desktop/EEATO/Oswego Fall 2023/CSC 344/Project1",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -108,6 +66,7 @@
       <option name="presentableId" value="Default" />
       <updated>1695578970410</updated>
       <workItem from="1695578971412" duration="48000" />
+      <workItem from="1695655136661" duration="818000" />
     </task>
     <servers />
   </component>

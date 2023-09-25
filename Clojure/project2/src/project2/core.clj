@@ -1,35 +1,35 @@
 (ns project2.core
+  (:require [clojure.string :as str])
   (:gen-class))
 
-(defn -main
-  "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+
+;;How to do not not elimination
+;;1. If 2<= nots, remove 2 nots and return the remaining value
+;;2. if 1 not, then return empty string
+
+;(defn isItNot?
+;  "Determine if value is not"
+;  )
+(defn not-elimination
+  "Take a function and clarify its double negatives"
+  [not-expr]
+  (if (str/includes? [not-expr] "not" )
+       "Has not"
+       "Not has not"
+    ))
 
 
-(if true
-  "By Zeus's hammer!"
-  "By Aquaman's trident!")
+
+(if (str/includes? "(not x)" "not" )
+  "Has not"
+  "Does not have not")
+
+(not-elimination '(not x))
 
 
-(if (true false)
-  "By Zeus's hammer!"
-  "By Aquaman's trident!")
+(defn count-word
+  "Count how many times a word appears"
+  [string]
+  (count (re-seq #"and" string)))
 
-(if (= "hello" "hello")
-  "true"
-  "false")
-
-;; broken code? Why does it not return Chewbacca as name?
-(def name "Chewbacca")
-(str "\"Uggllglglglglglglglll\" - " @name)
-
-;; doesn't work at all
-(defn error-message
-      [severity]
-      (str "OH GOD! IT'S A DISASTER! WE'RE "
-           (if (= severity :mild)
-             "MILDLY INCONVENIENCED!"
-             "DOOOOOOOMED!")))
-
-(error-message :mild)
+(count-word "and and and and and and")
