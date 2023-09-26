@@ -10,6 +10,11 @@
 ;(defn isItNot?
 ;  "Determine if value is not"
 ;  )
+(defn not-count
+  "Count how many times a word appears"
+  [string]
+  (count (re-seq #"not" string)))
+
 (defn not-elimination
   "Take a function and clarify its double negatives"
   [not-expr]
@@ -18,18 +23,13 @@
        "Not has not"
     ))
 
+(not-elimination "(not (not x))")
+(not-count "(not (not x))")
+(not-count `(not (not x)))
 
 
 (if (str/includes? "(not x)" "not" )
   "Has not"
   "Does not have not")
 
-(not-elimination '(not x))
 
-
-(defn count-word
-  "Count how many times a word appears"
-  [string]
-  (count (re-seq #"and" string)))
-
-(count-word "and and and and and and")

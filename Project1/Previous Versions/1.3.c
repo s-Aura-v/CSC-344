@@ -171,7 +171,7 @@ void initializeTable(char* input) {
     int newState;
 
 
-    sscanf(input, "(%d,%c)->(%c,%c,%d)", &currentState - 48, &readValue, &writeValue, &moveDirection,&newState - 48);
+    sscanf(input, "(%d,%c)->(%c,%c,%d)", &currentState, &readValue, &writeValue, &moveDirection,&newState);
 
     instructionTable[currentState][readValue].currentState = currentState;
     instructionTable[currentState][readValue].readValue = readValue;
