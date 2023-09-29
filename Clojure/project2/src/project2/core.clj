@@ -5,8 +5,8 @@
   "Eliminate double-nots from a function of nots"
   [expr]
   (if
-    (and  (list? expr) (= 'not (first expr))
-          (list? (second expr)) (= 'not (first (second expr))))
+    (and (= 'not (first expr))
+         (list? (second expr)) (= 'not (first (second expr))))
     ;; check if there are 2 nots
     (second (second expr))
     ;; if not, check if there is not is present at all
