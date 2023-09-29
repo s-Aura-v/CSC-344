@@ -31,24 +31,7 @@
 
 
 
-
-;;if, infer
-;;tests
-(def if-string '((if A B) and B))
-(first if-string)
-(second (first if-string))
-(nth (first if-string) 2)
-(= (second (first if-string)) (nth if-string 2))
-(if  (= (second (first if-string)) (nth if-string 2))
-  "A"
-  "B")
-(= (nth (first if-string) 2) (nth if-string 2))
-(if (= (nth (first if-string) 2) (nth if-string 2))
-  "A"
-  "B")
-
-(second if-string)
-(nth if-string 2)
+;;modus ponens: from (if X Y) and X, infer Y
 
 (defn modus-ponens
   "Infer x from if (X Y) and X"
@@ -62,13 +45,26 @@
       ()
      )))
 
-(modus-ponens if-string)
+;;Tests
+(modus-ponens '((if A B) and A))
+(modus-ponens '((if A B) and B))
+(modus-ponens '((if A B) and C))
 
 
-;;tests
-;(fwd-infer '(if a b) '#{(not b)})
-;Because: (if a b)
-;and: (not b)
-;I derived: (not a)
-;by modus tollens
-;=> #{(if a b) (not a) (not b)}
+
+
+;;modus tollens: from (if X Y) and (not Y), infer (not X)
+(def if-string '((if A B) and B))
+(first if-string)
+(second (first if-string))
+(nth (first if-string) 2)
+(= (second (first if-string)) (nth if-string 2))
+(if  (= (second (first if-string)) (nth if-string 2))
+  "A"
+  "B")
+(= (nth (first if-string) 2) (nth if-string 2))
+(if (= (nth (first if-string) 2) (nth if-string 2))
+  "A"
+  "B")
+(second if-string)
+(nth if-string 2)
