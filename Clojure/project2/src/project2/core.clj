@@ -5,16 +5,20 @@
   "Eliminate double-nots from a function of nots"
   [expr]
   (if
-    (and (= 'not (first expr)) (= 'not (first (second expr))))
-    ;; If there are two consecutive 'not' expressions, return the inner expression.
+    (and  (= (list? expr) (= 'not (first expr)))
+          (= (list? (second expr)) (= 'not (first (second expr)))))
+    ;; check if there are 2 nots
     (second (second expr))
-    ;; If not, return the original expression.
-    (do (if (= 'not (first expr))
-          ()
-          ;; if false, return expr
-          expr))))
+    ;; if not, check if there is not is present at all
+    (if (= 'not (first expr))
+      ;;return nothing if there is a not
+      ()
+      ;;return the expression if there are no nots
+      expr)
+    ))
 
 ;; Tests
+(not-elimination '(a))
 (not-elimination '(not a))
 (not-elimination '(not (not a)))
 (not-elimination '(not (not (and a b))))
