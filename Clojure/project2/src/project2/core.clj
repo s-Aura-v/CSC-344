@@ -53,18 +53,34 @@
 
 
 
-;;modus tollens: from (if X Y) and (not Y), infer (not X)
-(def if-string '((if A B) and B))
-(first if-string)
-(second (first if-string))
-(nth (first if-string) 2)
-(= (second (first if-string)) (nth if-string 2))
-(if  (= (second (first if-string)) (nth if-string 2))
-  "A"
-  "B")
-(= (nth (first if-string) 2) (nth if-string 2))
-(if (= (nth (first if-string) 2) (nth if-string 2))
-  "A"
-  "B")
-(second if-string)
-(nth if-string 2)
+;;;modus tollens: from (if X Y) and (not Y), infer (not X)
+;(def if-string '((if A B) and (not B)))
+;(first if-string)
+;(second (first if-string))
+;(nth (first if-string) 2)
+;(last if-string)
+;(second (last if-string))
+;(not-elimination (last if-string))
+;(= (second (first if-string)) (nth if-string 2))
+;(if  (= (second (first if-string)) (last (nth if-string 2)))
+;  "A"
+;  "B")
+;(= (nth (first if-string) 2) (nth if-string 2))
+;(if (= (nth (first if-string) 2) (nth if-string 2))
+;  "A"
+;  "B")
+;(second if-string)
+;(nth if-string 2)
+;
+;
+;(defn modus-tollens
+;  "Evaluate (not A) from if (A B) and (not B)"
+;  [if-prop]
+;  (if  (= (second (first if-string)) (last (nth if-string 2)))
+;    (list (not (last (nth if-string 2))))
+;    (list (not (second (first if-prop ))))
+;    )
+;  )
+;
+;(modus-tollens if-string)
+;(= (second (first if-string)) ((last if-string)) )
