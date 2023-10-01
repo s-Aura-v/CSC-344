@@ -27,8 +27,22 @@
 
 
 ;;and-elimination
-;(defn and-elimination [and-prop] )
 
+(defn and-elimination
+  "Return a vector of {a,b} if A and B"
+  [and-prop]
+  (if (= 'and (first and-prop))
+    (set '((second and-prop) (nth and-prop 2)))
+    "Not an and-statement"
+    ))
+
+
+
+(def andprop2 '(and a b))
+(and-elimination andprop2)
+(first '(and a b))
+(second '(and a b))
+(nth andprop2 2)
 
 
 ;;modus ponens: from (if X Y) and X, infer Y
