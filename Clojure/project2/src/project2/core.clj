@@ -1,6 +1,10 @@
 (ns project2.core
   (:require [clojure.string :as str])
   (:gen-class))
+
+;;Not Elimination
+
+
 (defn not-elimination
   "Eliminate double-nots from a function of nots"
   [expr]
@@ -23,7 +27,6 @@
 (not-elimination '(not (not a)))
 (not-elimination '(not (not (and a b))))
 (not-elimination '(not (not (not (not c)))))
-;;
 
 
 ;;and-elimination
@@ -38,11 +41,9 @@
 
 ;;Tests
 (and-elimination '(and a b))
-(and-elimination '(and a b c)) ;;ask dan about this later
-
+(and-elimination '(and (not (not (if a b))) a))
 
 ;;modus ponens: from (if X Y) and X, infer Y
-
 
 (defn modus-ponens
   "Infer x from if (X Y) and X"
@@ -62,36 +63,40 @@
 (modus-ponens '((if A B) and C))
 
 
-
-
 ;;;modus tollens: from (if X Y) and (not Y), infer (not X)
-;(def if-string '((if A B) and (not B)))
-;(first if-string)
-;(second (first if-string))
-;(nth (first if-string) 2)
-;(last if-string)
-;(second (last if-string))
-;(not-elimination (last if-string))
-;(= (second (first if-string)) (nth if-string 2))
-;(if  (= (second (first if-string)) (last (nth if-string 2)))
-;  "A"
-;  "B")
-;(= (nth (first if-string) 2) (nth if-string 2))
-;(if (= (nth (first if-string) 2) (nth if-string 2))
-;  "A"
-;  "B")
-;(second if-string)
-;(nth if-string 2)
-;
-;
-;(defn modus-tollens
-;  "Evaluate (not A) from if (A B) and (not B)"
-;  [if-prop]
-;  (if  (= (second (first if-string)) (last (nth if-string 2)))
-;    (list (not (last (nth if-string 2))))
-;    (list (not (second (first if-prop ))))
-;    )
-;  )
-;
-;(modus-tollens if-string)
-;(= (second (first if-string)) ((last if-string)) )
+
+(def if-string '((if A B) and (not C)))
+(first if-string)
+(second (first if-string))
+(last (nth if-string 2))
+(nth (first if-string) 2)
+(last if-string)
+(second (last if-string))
+(not-elimination (last if-string))
+(= (second (first if-string)) (nth if-string 2))
+(if  (= (second (first if-string)) (last (nth if-string 2)))
+  "A"
+  "B")
+(= (nth (first if-string) 2) (nth if-string 2))
+(if (= (nth (first if-string) 2) (nth if-string 2))
+  "A"
+  "B")
+(second if-string)
+(nth if-string 2)
+(first (nth if-string 2))
+
+
+(defn modus-tollens
+  "Evaluate (not A) from if (A B) and (not B)"
+  [if-prop]
+  (if  (= (second (first if-prop)) (last (nth if-prop 2)))
+    (list 'not (nth (first if-string) 2))
+    ;;Remember to check if its even there
+    (list 'not (second (first if-prop)))
+    )
+  )
+
+(modus-tollens if-string)
+(modus-tollens '((if A B) and (not A)))
+(modus-tollens '((if A B) and (not B)))
+(= (second (first if-string))  (last if-string) )
