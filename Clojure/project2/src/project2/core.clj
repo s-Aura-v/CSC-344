@@ -86,17 +86,17 @@
   [prop]
   ;;Not elimination
   (if (and (list? prop) (= 'not (first prop)))
-    (not-elimination 'prop)
+    (not-elimination prop)
     ;;and-elimination
     (if (and (list? prop) (= 'and (first prop)))
-      (and-elimination 'prop)
+      (and-elimination prop)
       ;;if X Y and X infer Y
       (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ())
-        (modus-ponens 'prop)
+        (modus-ponens prop)
         ;; if X Y and not X, infer X
         (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ())
-          (modus-tollens 'prop)
-          "None of them work"
+          (modus-tollens prop)
+          prop
           )
         )
       )
