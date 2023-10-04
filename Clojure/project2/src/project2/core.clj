@@ -4,7 +4,6 @@
 
 ;;Not Elimination
 
-
 (defn not-elimination
   "Eliminate double-nots from a function of nots"
   [expr]
@@ -69,7 +68,7 @@
   "Evaluate (not A) from if (A B) and (not B)"
   [if-prop]
   (if  (= (second (first if-prop)) (last (nth if-prop 2)))
-    (list 'not (nth (first if-string) 2))
+    (list 'not (nth (first if-prop) 2))
     ;;Remember to check if its even there
     (list 'not (second (first if-prop)))
     )
@@ -80,4 +79,30 @@
 (modus-tollens '((if A B) and (not B)))
 
 
-;;Elim-step
+;Elim-step
+
+(defn elim-step
+  "One step of the elimination inference procedure."
+  [prop]
+  ;;Not elimination
+  (if (and (list? prop) (= 'not (first prop)))
+    (not-elimination 'prop)
+    ;;and-elimination
+    (if (and (list? prop) (= 'and (first prop)))
+      (and-elimination 'prop)
+      ;;if X Y and X infer Y
+      (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ())
+        (modus-ponens 'prop)
+        ;; if X Y and not X, infer X
+        (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ())
+          (modus-tollens 'prop)
+          "None of them work"
+          )
+        )
+      )
+    )
+  )
+
+(def testF '(and (not (not if (a b)))  a))
+(elim-step testF)
+
