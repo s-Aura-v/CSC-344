@@ -108,13 +108,24 @@
 ;;Infer-fwd
 
 
-(empty? '(1 2 3))
-(empty? ())
+(defn fwd-infer
+  "Make logical inferences based on propositions"
+  [prop known]
+  (loop [prop prop
+         known known]
+    (if (empty? prop)
+      known
+      (let [new-known (elim-step (first prop))]
+        (recur (rest prop) (clojure.set/union known new-known))))))
 
 
-;;Tests
-(fwd-infer '(if a b) '#{(not b)})
-(fwd-infer 'a '#{(if a b) (if b c)})
-(fwd-infer-elim '(and (not (not (if a b))) a) '#{})
+  (empty? '(1 2 3))
+  (empty? ())
 
 
+  ;;Tests
+  (fwd-infer '(if a b) '#{(not b)})
+;;#{(if a b) (not a) (not b)}p
+  (fwd-infer 'a '#{(if a b) (if b c)})
+  (fwd-infer '(and (not (not (if a b))) a) '#{})
+;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
