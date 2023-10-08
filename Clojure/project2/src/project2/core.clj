@@ -47,14 +47,14 @@
 (defn modus-ponens
   "Infer x from if (X Y) and X"
   [if-prop]
-  (if  (= (second (first if-prop)) (nth if-prop 2))
+  (if (and (list? if-prop) (= (second (first if-prop)) (nth if-prop 2)))
     ;;if first input is equal to given variable
     #{(second (first if-prop))}
     ;;else if second input is equal to given variable
-    (if (= (nth (first if-prop) 2) (nth if-prop 2))
+    (if (and (list? if-prop) (= (nth (first if-prop) 2) (nth if-prop 2)))
       #{(nth (first if-prop) 2)}
       #{()}
-     )))
+      )))
 
 ;;Tests
 (modus-ponens '((if A B) and A))
@@ -106,15 +106,6 @@
 (elim-step testF)
 
 ;;Infer-fwd
-
-(defn fwd-infer
-  "Make logical inferences based on propositions"
-  [prop known]
-  (loop [ prop known]
-    if (empty? prop)
-    (concat prop )
-  )
-
 
 
 (empty? '(1 2 3))
