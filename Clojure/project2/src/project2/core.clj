@@ -60,7 +60,7 @@
 (defn modus-ponens
   "Infer x from if (X Y) and X"
   [if-prop kb]
-  (if (= (first (first kb)) (nth if-prop 1))
+  (if (= (first (first kb)) (second if-prop))
     #{(list (nth if-prop 1))}
     #{(list (nth if-prop 2))}
   ))
@@ -68,6 +68,8 @@
 ;;Tests
 (modus-ponens '(if A B) '#{(A)})
 (modus-ponens '(if A B) '#{(B)})
+
+
 
 
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
@@ -87,8 +89,6 @@
 
 
 
-
-
 ;Elim-step
 
 (defn elim-step
@@ -102,9 +102,9 @@
       (and-elimination prop)
       ;;if X Y and X infer Y
       (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first kb))) ())
-        ;; if it has a not, do ponens
+        ;; if it has a not, do tollens
         (modus-tollens prop kb)
-        ;;if not, do tollens
+        ;;if not, do ponens
         (modus-ponens prop kb)
         )
       )
@@ -117,21 +117,7 @@
 (elim-step '(if A B) '#{(A)})
 (elim-step '(if A B) '#{(not A)})
 
-(list? (last '#{(not A)}))
-(list? (last '#{(A)}))
-
-(contains? (first '#{(not A)}) 'not)
-
-(contains? '#{(not A)} 'not)
-(first (first '#{(not A)}))
-(contains? '(first #{(not A)}) 'not)
-(some 'not '(first #{(not A)}))
-(some 'not '#{(not A)})
-(= 'not (first (first '#{(not A)})))
-(= 'not (first (first '#{()})))
-;;Infer-fwd
-
-
+;;Infer fwd
 (defn fwd-infer
   "Make logical inferences based on propositions"
   [prop known]
@@ -142,9 +128,10 @@
       (let [new-known (elim-step (first prop) known)]
         (recur (rest prop) (clojure.set/union known new-known))))))
 
-  ;;Tests
+
+;;Tests
   (fwd-infer '(if a b) '#{(not b)})
-;;#{(if a b) (not a) (not b)}p
+;;#{(if a b) (not a) (not b)}
   (fwd-infer 'a '#{(if a b) (if b c)})
   (fwd-infer '(and (not (not (if a b))) a) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
