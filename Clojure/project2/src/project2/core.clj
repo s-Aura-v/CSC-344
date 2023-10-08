@@ -34,7 +34,7 @@
   "Return a vector of {a,b} if A and B"
   [and-prop]
   (if (= 'and (first and-prop))
-    #{(second and-prop) (nth and-prop 2)}
+    #{(list (second and-prop) (nth and-prop 2))}
     "Not an and-statement"
     ))
 
@@ -70,8 +70,6 @@
 (modus-ponens '(if A B) '#{(B)})
 
 
-
-
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
 
 (defn modus-tollens
@@ -91,21 +89,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 ;Elim-step
 
 (defn elim-step
   "One step of the elimination inference procedure."
-  [prop]
+  [prop kb]
   ;;Not elimination
   (if (and (list? prop) (= 'not (first prop)))
     (not-elimination prop)
@@ -113,20 +101,34 @@
     (if (and (list? prop) (= 'and (first prop)))
       (and-elimination prop)
       ;;if X Y and X infer Y
-      (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ())
-        ;; if it's a list, do tollens
-        (modus-tollens prop)
-        ;;if not, do ponens
-        (modus-ponens prop)
+      (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first kb))) ())
+        ;; if it has a not, do ponens
+        (modus-tollens prop kb)
+        ;;if not, do tollens
+        (modus-ponens prop kb)
         )
       )
     )
   )
 
 ;;Tests
-(def testF '(and (not (not if (a b))) a))
-(elim-step testF)
+(elim-step '(not (not (and a b))) #{})
+(elim-step '(and (not (not (if a b))) a) #{})
+(elim-step '(if A B) '#{(A)})
+(elim-step '(if A B) '#{(not A)})
 
+(list? (last '#{(not A)}))
+(list? (last '#{(A)}))
+
+(contains? (first '#{(not A)}) 'not)
+
+(contains? '#{(not A)} 'not)
+(first (first '#{(not A)}))
+(contains? '(first #{(not A)}) 'not)
+(some 'not '(first #{(not A)}))
+(some 'not '#{(not A)})
+(= 'not (first (first '#{(not A)})))
+(= 'not (first (first '#{()})))
 ;;Infer-fwd
 
 
@@ -137,13 +139,8 @@
          known known]
     (if (empty? prop)
       known
-      (let [new-known (elim-step (first prop))]
+      (let [new-known (elim-step (first prop) known)]
         (recur (rest prop) (clojure.set/union known new-known))))))
-
-
-  (empty? '(1 2 3))
-  (empty? ())
-
 
   ;;Tests
   (fwd-infer '(if a b) '#{(not b)})
