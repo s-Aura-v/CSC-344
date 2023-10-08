@@ -46,7 +46,7 @@
 
 (defn modus-ponens
   "Infer x from if (X Y) and X"
-  [if-prop]
+  [if-prop kb]
   (if (and (list? if-prop) (= (second (first if-prop)) (nth if-prop 2)))
     ;;if first input is equal to given variable
     #{(second (first if-prop))}
@@ -57,26 +57,51 @@
       )))
 
 ;;Tests
-(modus-ponens '((if A B) and A))
-(modus-ponens '((if A B) and B))
-(modus-ponens '((if A B) and C))
+;(modus-ponens '((if A B) 'A))
+;(modus-ponens '((if A B) 'B))
+;(modus-ponens '((if A B) 'C))
 
 
-;;;modus tollens: from (if X Y) and (not Y), infer (not X)
+;;modus tollens: from (if X Y) and (not Y), infer (not X)
+
+;(defn modus-tollens
+;  "Evaluate (not A) from if (A B) and (not B)
+;  [if-prop kb]"
+;  (if (= (second if-prop) (second (first kb)))
+;    ;(set ['not (second if-prop)])
+;    ;;Remember to check if its even there
+;    ;(set ['not (nth if-prop 2)])
+;    "A"
+;    "B"
+;    )
+;  )
+;
 
 (defn modus-tollens
   "Evaluate (not A) from if (A B) and (not B)"
-  [if-prop]
-  (if  (= (second (first if-prop)) (last (nth if-prop 2)))
-    (set ['not (nth (first if-prop) 2)])
-    ;;Remember to check if its even there
-    (set ['not (second (first if-prop))])
-    )
-  )
+  [if-prop kb]
+  (if (= (second if-prop) (second (first kb)))
+    (set ['not (nth if-prop 2)])
+    (set ['not (second if-prop)])
+    ))
 
 ;;Tests
-(modus-tollens '((if A B) and (not A)))
-(modus-tollens '((if A B) and (not B)))
+(modus-tollens '(if A B) '#{(not A)})
+(modus-tollens '(if A B) '#{(not B)})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ;Elim-step
