@@ -44,32 +44,19 @@
 
 ;;modus ponens: from (if X Y) and X, infer Y
 
-;(defn modus-ponens
-;  "Infer x from if (X Y) and X"
-;  [if-prop kb]
-;  (if (and (list? if-prop) (= (second (first if-prop)) (nth if-prop 2)))
-;    ;;if first input is equal to given variable
-;    #{(second (first if-prop))}
-;    ;;else if second input is equal to given variable
-;    (if (and (list? if-prop) (= (nth (first if-prop) 2) (nth if-prop 2)))
-;      #{(nth (first if-prop) 2)}
-;      #{()}
-;      )))
-
 
 (defn modus-ponens
   "Infer x from if (X Y) and X"
   [if-prop kb]
-  (if (= (first (first kb)) (second if-prop))
-    #{(list (nth if-prop 1))}
-    #{(list (nth if-prop 2))}
-  ))
+  (let [if-prop-list (first (seq if-prop))
+        kb-list (first (seq kb))]
+    (if (= (first kb-list) (second if-prop-list))
+      #{(list (nth if-prop-list 1))}
+      #{(list (nth if-prop-list 2))})))
 
 ;;Tests
-(modus-ponens '(if A B) '#{(A)})
-(modus-ponens '(if A B) '#{(B)})
-
-
+(modus-ponens '#{(if A B)} '#{(A)})
+(modus-ponens '#{(if A B)} '#{(B)})
 
 
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
@@ -85,8 +72,6 @@
 ;;Tests
 (modus-tollens '(if A B) '#{(not A)})
 (modus-tollens '(if A B) '#{(not B)})
-
-
 
 
 ;Elim-step
@@ -114,7 +99,7 @@
 ;;Tests
 (elim-step '(not (not (and a b))) #{})
 (elim-step '(and (not (not (if a b))) a) #{})
-(elim-step '(if A B) '#{(A)})
+(elim-step '#{(if A B)} '#{(A)})
 (elim-step '(if A B) '#{(not A)})
 
 ;;Infer fwd
@@ -130,8 +115,7 @@
 
 
 ;;Tests
-  (fwd-infer '(if a b) '#{(not b)})
+(fwd-infer '#{(if a b)} '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-  (fwd-infer 'a '#{(if a b) (if b c)})
-  (fwd-infer '(and (not (not (if a b))) a) '#{})
+(fwd-infer '#{(and (not (not (if a b))) a)} '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
