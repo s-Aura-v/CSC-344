@@ -111,7 +111,8 @@
     (if (empty? prop)
       known
       (let [new-known (elim-step (first prop) known)]
-        (recur (rest prop) (clojure.set/union known new-known))))))
+        (recur (rest prop) (clojure.set/union known new-known)
+               )))))
 
 
 ;;Tests
@@ -119,3 +120,4 @@
 ;;#{(if a b) (not a) (not b)}
 (fwd-infer '#{(and (not (not (if a b))) a)} '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
+
