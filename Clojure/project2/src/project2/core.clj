@@ -48,15 +48,14 @@
 (defn modus-ponens
   "Infer x from if (X Y) and X"
   [if-prop kb]
-  (let [if-prop-list (first (seq if-prop))
-        kb-list (first (seq kb))]
-    (if (= (first kb-list) (second if-prop-list))
-      #{(list (nth if-prop-list 1))}
-      #{(list (nth if-prop-list 2))})))
+  (if (= (first (first kb)) (nth if-prop 1))
+    #{(list (nth if-prop 1))}
+    #{(list (nth if-prop 2))}
+    ))
 
 ;;Tests
-(modus-ponens '#{(if A B)} '#{(A)})
-(modus-ponens '#{(if A B)} '#{(B)})
+(modus-ponens '(if A B) '#{(A)})
+(modus-ponens '(if A B) '#{(B)})
 
 
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
@@ -99,7 +98,7 @@
 ;;Tests
 (elim-step '(not (not (and a b))) #{})
 (elim-step '(and (not (not (if a b))) a) #{})
-(elim-step '#{(if A B)} '#{(A)})
+(elim-step '(if A B) '#{(A)})
 (elim-step '(if A B) '#{(not A)})
 
 ;;Infer fwd
@@ -116,7 +115,7 @@
 
 
 ;;Tests
-(fwd-infer '#{(if a b)} '#{(not b)})
+(fwd-infer '(if a b) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
 (fwd-infer '#{(and (not (not (if a b))) a)} '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
