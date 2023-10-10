@@ -92,6 +92,7 @@
 (modus-tollens '(if A B) '#{(not A)})
 (modus-tollens '(if A B) '#{(not B)})
 
+(second (first '#{(not A)}))
 
 ;Elim-step
 
@@ -125,7 +126,7 @@
     (if (and (list? prop) (= 'and (first prop)))
       (and-elimination prop)
       ;;if X Y and X infer Y
-      (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first '#{(not b)}))))
+      (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first kb))))
         ;; if it has a not, do tollens
         (modus-tollens prop kb)
         ;;if not, do ponens
