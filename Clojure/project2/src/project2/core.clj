@@ -49,10 +49,19 @@
 (defn modus-ponens2
   "Infer x from if (X Y) and X"
   [if-prop kb]
-  (if (= (second if-prop) (first kb))
-    #{ (nth if-prop 2)}
-    #{ (nth if-prop 1)}
-    ))
+  (if (not (symbol? if-prop))
+    ;;true
+    (if (= (second if-prop) (first kb))
+      #{(nth if-prop 2)}
+      #{(nth if-prop 1)}
+      )
+    ;;false
+    (if (= if-prop (second kb))
+      #{(nth kb 2)}
+      #{(nth kb 1)}
+      )
+    )
+  )
 
 ;;Tests
 (modus-ponens2 '(if A B) '#{A})
@@ -60,9 +69,12 @@
 (modus-ponens2 '(if A B) '#{B})
 
 (second '(if A B))
-(first '#{D})
 
-
+(modus-ponens2 'a '(if a b))
+(modus-ponens2 'b '(if a b))
+(= 'a (second '(if a b)))
+(not (symbol? 'a))
+(nth '(if a b) 1)
 
 
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
@@ -88,25 +100,42 @@
   "One step of the elimination inference procedure."
   [prop kb]
   ;;Not elimination
-  (if (and (list? prop) (= 'not (first prop)))
-    (not-elimination prop)
-    ;;and-elimination
-    (if (and (list? prop) (= 'and (first prop)))
-      (and-elimination prop)
-      ;;if X Y and X infer Y
-      (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))
-        ;; if it has a not, do tollens
-        (modus-tollens prop kb)
-        ;;if not, do ponens
-        (modus-ponens2 prop kb)
+  (if (not (symbol? prop)) ;;if prop is a not symbol
+    ;;if true
+    (if (and (list? prop) (= 'not (first prop)))
+      (not-elimination prop)
+      ;;and-elimination
+      (if (and (list? prop) (= 'and (first prop)))
+        (and-elimination prop)
+        ;;if X Y and X infer Y
+        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))
+          ;; if it has a not, do tollens
+          (modus-tollens prop kb)
+          ;;if not, do ponens
+          (modus-ponens2 prop kb)
+          )
         )
       )
+    ;;if false
+      (modus-ponens2 (first kb) prop)
+      )
     )
-  )
 
-;;plan check if (first kb) is a list
+;;main test 3
+(elim-step1 'a '#{(if a b) (if b c)})
 
-;;Tests
+(first '#{(if a b) (if b c)})
+(symbol? 'a)
+(elim-step1 'a '#{(if a b) (if b c)} )
+
+
+;;test 1: works! [other than having prop]
+(fwd-infer '((if a b)) '#{(not b)})
+(elim-step1 '(if a b) '#{(not b)})
+(first '#{(not b)})
+(first (first '#{(not b)}))
+
+;;Test 3
 (elim-step1 '(and (not (not (if a b))) a) '#{})
 (elim-step1 '(not (not (if a b))) '#{a})
 (elim-step1 '(if a b) '#{a})
@@ -115,16 +144,10 @@
                    #{'(and (not (not (if a b))) a)}
                    (elim-step1 '(if a b) '#{a}))
 
-;;put on hold 
-
-;;test 2: works! [other than having prop]
-(fwd-infer '((if a b)) '#{(not b)})
-(elim-step1 '(if a b) '#{(not b)})
-(first '#{(not b)})
-(first (first '#{(not b)}))
+;;put on hold
 
 
-(first '#{a})
+
 
 ;;Infer fwd
 
