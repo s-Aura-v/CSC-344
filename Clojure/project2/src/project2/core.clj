@@ -45,19 +45,6 @@
 ;;modus ponens: from (if X Y) and X, infer Y
 
 
-;(defn modus-ponens
-;  "Infer x from if (X Y) and X"
-;  [if-prop kb]
-;  (if (= (first (first kb)) (nth if-prop 1))
-;    #{(list (nth if-prop 2))}
-;    #{(list (nth if-prop 1))}
-;    ))
-
-;;Tests
-(modus-ponens '(if A B) '#{(A)})
-(modus-ponens '(if A B) '#{(B)})
-
-
 ;;modus ponens2
 (defn modus-ponens2
   "Infer x from if (X Y) and X"
@@ -96,25 +83,6 @@
 
 ;Elim-step
 
-(defn elim-step
-  "One step of the elimination inference procedure."
-  [prop kb]
-  ;;Not elimination
-  (if (and (list? prop) (= 'not (first prop)))
-    (not-elimination prop)
-    ;;and-elimination
-    (if (and (list? prop) (= 'and (first prop)))
-      (and-elimination prop)
-      ;;if X Y and X infer Y
-      (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first kb))) ())
-        ;; if it has a not, do tollens
-        (modus-tollens prop kb)
-        ;;if not, do ponens
-        (modus-ponens prop kb)
-        )
-      )
-    )
-  )
 
 (defn elim-step1
   "One step of the elimination inference procedure."
@@ -126,7 +94,7 @@
     (if (and (list? prop) (= 'and (first prop)))
       (and-elimination prop)
       ;;if X Y and X infer Y
-      (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first kb))))
+      (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))
         ;; if it has a not, do tollens
         (modus-tollens prop kb)
         ;;if not, do ponens
@@ -136,13 +104,15 @@
     )
   )
 
+;;plan check if (first kb) is a list
 
 ;;Tests
 (elim-step1 '(and (not (not (if a b))) a) '#{})
 (elim-step1 '(not (not (if a b))) '#{a})
 (elim-step1 '(if a b) '#{a})
+(first '#{a})
 
-;;test 2
+;;test 2: works! [other than having prop]
 (fwd-infer '((if a b)) '#{(not b)})
 (elim-step1 '(if a b) '#{(not b)})
 (first '#{(not b)})
@@ -178,8 +148,11 @@
    ;;Tests
 (fwd-infer '((if a b)) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-(fwd-infer 'a '#{(if a b) (if b c)})
 (fwd-infer '((and (not (not (if a b))) a)) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
+
+
+
+;(fwd-infer 'a '#{(if a b) (if b c)})
 
 
