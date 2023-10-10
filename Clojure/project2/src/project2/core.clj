@@ -125,7 +125,7 @@
     (if (and (list? prop) (= 'and (first prop)))
       (and-elimination prop)
       ;;if X Y and X infer Y
-      (if (and (list? prop) (= 'if (first prop)) (= 'not (first kb)))
+      (if (and (list? prop) (= 'if (first prop)) (= 'not (first (first '#{(not b)}))))
         ;; if it has a not, do tollens
         (modus-tollens prop kb)
         ;;if not, do ponens
@@ -141,6 +141,11 @@
 (elim-step1 '(not (not (if a b))) '#{a})
 (elim-step1 '(if a b) '#{a})
 
+;;test 2
+(fwd-infer '((if a b)) '#{(not b)})
+(elim-step1 '(if a b) '#{(not b)})
+(first '#{(not b)})
+(first (first '#{(not b)}))
 
 
 (first '#{a})
