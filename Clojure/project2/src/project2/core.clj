@@ -117,7 +117,7 @@
         )
       )
     ;;if false
-      (modus-ponens2 (first kb) prop)
+      (modus-ponens2 prop (first kb))
       )
     )
 
