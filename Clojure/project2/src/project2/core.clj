@@ -110,7 +110,12 @@
 (elim-step1 '(and (not (not (if a b))) a) '#{})
 (elim-step1 '(not (not (if a b))) '#{a})
 (elim-step1 '(if a b) '#{a})
-(first '#{a})
+(clojure.set/union (elim-step1 '(and (not (not (if a b))) a) '#{})
+                   (elim-step1 '(not (not (if a b))) '#{a})
+                   #{'(and (not (not (if a b))) a)}
+                   (elim-step1 '(if a b) '#{a}))
+
+;;put on hold 
 
 ;;test 2: works! [other than having prop]
 (fwd-infer '((if a b)) '#{(not b)})
@@ -123,26 +128,15 @@
 
 ;;Infer fwd
 
-;(defn fwd-infer2
-;  [prop known]
-;  (loop [current-prop prop
-;         current-known known]
-;    (if (not (empty? current-prop))
-;      (recur (rest current-prop)
-;             (clojure.set/union current-known (first current-prop)))
-;      current-known
-;      )
-;    ))
-
 (defn fwd-infer
   "Make logical inferences based on propositions"
   [prop known]
-  (loop [prop prop
-         known known]
-    (if (empty? prop)
-      known
-      (let [new-known (elim-step1 (first prop) known)]
-        (recur (rest prop) (clojure.set/union prop known new-known)
+  (loop [current-prop prop
+         current-known known]
+    (if (empty? current-prop)
+      current-known
+      (let [new-known (elim-step1 (first current-prop) current-known)]
+        (recur (rest current-prop) (clojure.set/union current-known new-known)
                )))))
 
    ;;Tests
