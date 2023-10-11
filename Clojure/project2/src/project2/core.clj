@@ -78,6 +78,16 @@
 (modus-tollens '(if A B) '#{(not A)})
 (modus-tollens '(if A B) '#{(not B)})
 
+;;Relevant-kb for modus-ponens2
+(defn relevant-kb [ant kb]
+  (for [prop kb :when (and (seq? prop) (= (second prop) ant))] prop))
+(relevant-kb 'b '#{(if a b) (if b c)})
+
+;=> ((if b c))
+(relevant-kb 'a '#{(if a b) (if b c)})
+;=> ((if a b))
+
+
 ;Elim-step
 (defn elim-step1
   "One step of the elimination inference procedure."
@@ -100,7 +110,7 @@
         )
       )
     ;;if false
-    (modus-ponens2 prop (first kb))
+    (modus-ponens2 prop #{(first (relevant-kb prop 'kb))})
     )
   )
 
@@ -108,6 +118,9 @@
 ;;main test 2
 (elim-step1 'a '#{(if a b) (if b c)})
 (elim-step1 'b '#{(if a b) (if b c)})
+(relevant-kb 'b '#{(if a b) (if b c)})
+(first (relevant-kb 'b '#{(if a b) (if b c)}))
+#{(first (relevant-kb 'b '#{(if a b) (if b c)}))}
 (first '#{(if a b) (if b c)})
 (second '#{(if a b) (if b c)})
 
@@ -148,25 +161,17 @@
   [prop known]
   (loop [current-prop #{prop}
          current-known known]
-
     (if (empty? current-prop)
       current-known
+
       (let [new-known (elim-step1 (first current-prop) current-known)]
         (recur (rest current-prop) (clojure.set/union current-prop current-known new-known)
                )))))
 
-(defn relevant-kb [ant kb]
-  (for [prop kb :when (and (seq? prop) (= (second prop) ant))] prop))
-(relevant-kb 'b '#{(if a b) (if b c)})
-
-;=> ((if b c))
-(relevant-kb 'a '#{(if a b) (if b c)})
-;=> ((if a b))
-
 
 ;;Tests
-(fwd-infer '((if a b)) '#{(not b)})
+(fwd-infer '(if a b) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-(fwd-infer '((and (not (not (if a b))) a)) '#{})
+(fwd-infer '(and (not (not (if a b))) a) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
 (fwd-infer 'a '#{(if a b) (if b c)})
