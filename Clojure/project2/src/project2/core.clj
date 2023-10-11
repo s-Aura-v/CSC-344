@@ -110,7 +110,7 @@
         )
       )
     ;;if false
-    (modus-ponens2 prop #{(first (relevant-kb prop 'kb))})
+    (modus-ponens2 prop (first (relevant-kb prop kb)))
     )
   )
 
@@ -119,10 +119,13 @@
 (elim-step1 'a '#{(if a b) (if b c)})
 (elim-step1 'b '#{(if a b) (if b c)})
 (relevant-kb 'b '#{(if a b) (if b c)})
+(modus-ponens2 'b (first (relevant-kb 'b '#{(if a b) (if b c)})))
+(modus-ponens2 'b '(if b c))
+
+
 (first (relevant-kb 'b '#{(if a b) (if b c)}))
+
 #{(first (relevant-kb 'b '#{(if a b) (if b c)}))}
-(first '#{(if a b) (if b c)})
-(second '#{(if a b) (if b c)})
 
 (symbol? 'a)
 (elim-step1 'a '#{(if a b) (if b c)} )
@@ -175,3 +178,4 @@
 (fwd-infer '(and (not (not (if a b))) a) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
 (fwd-infer 'a '#{(if a b) (if b c)})
+;;{(if a b) a c (if b c) b}
