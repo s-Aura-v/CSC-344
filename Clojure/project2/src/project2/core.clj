@@ -104,10 +104,6 @@
     )
   )
 
-;;    (do ;;this is causing errors because i'm doing two things at once
-;      (modus-ponens2 prop (first kb))
-;      (let [new-prop (modus-ponens2 prop (first kb))]
-;        (modus-ponens2 (first new-prop) (second kb)))
 
 ;;main test 2
 (elim-step1 'a '#{(if a b) (if b c)})
@@ -126,11 +122,11 @@
                      (elim-step1 'b '#{(if b c)})
                      #{(second '#{(if a b) (if b c)})}
                      #{(second (first '#{(if b c)}))}
-                    )
+                     )
 
 
 ;;test 1: works! [other than having prop]
-(fwd-infer '((if a b)) '#{(not b)})
+;(fwd-infer '((if a b)) '#{(not b)})
 (elim-step1 '(if a b) '#{(not b)})
 (first '#{(not b)})
 (first (first '#{(not b)}))
@@ -150,82 +146,27 @@
 (defn fwd-infer
   "Make logical inferences based on propositions"
   [prop known]
-  (loop [current-prop prop
+  (loop [current-prop #{prop}
          current-known known]
+
     (if (empty? current-prop)
-      ;;once current-prop is empty
-      (clojure.set/union prop current-known)
-      ;;if current-prop is not empty;
+      current-known
       (let [new-known (elim-step1 (first current-prop) current-known)]
-        (recur (rest current-prop)
-               (clojure.set/union current-known new-known)
+        (recur (rest current-prop) (clojure.set/union current-prop current-known new-known)
                )))))
 
+(defn relevant-kb [ant kb]
+  (for [prop kb :when (and (seq? prop) (= (second prop) ant))] prop))
+(relevant-kb 'b '#{(if a b) (if b c)})
 
-(defn fwd-infer2
-  "make inference breh"
-  [prop kb]
-  (if (symbol? prop)
-    ;;if 'a
-    (clojure.set/union   #{(first '#{(if a b) (if b c)})}
-                         #{(first (first '#{(if a b)}))} ;; this might be a stretch
-                         (elim-step1 'a '#{(if a b) (if b c)})
-                         (elim-step1 'b '#{(if b c)})
-                         #{(second '#{(if a b) (if b c)})}
-                         #{(second (first '#{(if b c)}))}
-                         )
-    ;;if knowledge is not empty
-    (if (not (empty? kb))
-      (fwd-infer '((if a b)) '#{(not b)})
-      ;;if it is empty
-      (clojure.set/union (elim-step1 '(and (not (not (if a b))) a) '#{})
-                         (elim-step1 '(not (not (if a b))) '#{a})
-                         #{'(and (not (not (if a b))) a)}
-                         (elim-step1 '(if a b) '#{a})
-                         )
-      )
-    )
-  )
+;=> ((if b c))
+(relevant-kb 'a '#{(if a b) (if b c)})
+;=> ((if a b))
 
-(defn fwd-infer3
-  "make inference breh"
-  [prop kb]
-  (if (symbol? prop)
-    ;;if 'a
-    (clojure.set/union   #{(first kb)}
-                         #{(first (first kb))}
-                         (elim-step1 prop kb)
-                         (elim-step1 'b '#{(if b c)}) ;; this might be a stretch
-                         #{(second kb)}
-                         #{(second (first kb))}
-                         )
-    ;;if knowledge is not empty
-    (if (not (empty? kb))
-      (fwd-infer prop kb)
-      ;;if it is empty
-      (clojure.set/union (elim-step1 prop kb)
-                         (elim-step1 (second prop) '#{(nth prop 2)})
-                         #{prop}
-                         (elim-step1 (second (second (second prop))) '#{(nth prop 2)})
-                         )
-      )
-    )
-  )
 
-(second '(and (not (not (if a b))) a))
-(nth '(and (not (not (if a b))) a) 2)
-(second (second (second '(and (not (not (if a b))) a))))
 ;;Tests
-(fwd-infer2 '((if a b)) '#{(not b)})
+(fwd-infer '((if a b)) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-(fwd-infer2 '(and (not (not (if a b))) a) '#{})
+(fwd-infer '((and (not (not (if a b))) a)) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
-(fwd-infer2 'a '#{(if a b) (if b c)})
-
-(nth '(and (not (not (if a b))) a) 2)
-
-(fwd-infer3 'a '#{(if a b) (if b c)})
-(fwd-infer3 '((if a b)) '#{(not b)})
-(fwd-infer3 '(and (not (not (if a b))) a) '#{})
-
-
+(fwd-infer 'a '#{(if a b) (if b c)})
