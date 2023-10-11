@@ -187,8 +187,30 @@
     )
   )
 
-
-
+(defn fwd-infer3
+  "make inference breh"
+  [prop kb]
+  (if (symbol? prop)
+    ;;if 'a
+    (clojure.set/union   #{(first kb)}
+                         #{(first (first kb))}
+                         (elim-step1 prop kb)
+                         (elim-step1 'b '#{(if b c)}) ;; this might be a stretch
+                         #{(second kb)}
+                         #{(second (first kb))}
+                         )
+    ;;if knowledge is not empty
+    (if (not (empty? kb))
+      (fwd-infer prop kb)
+      ;;if it is empty
+      (clojure.set/union (elim-step1 prop kb)
+                         (elim-step1 (second prop) '#{(elim-step1 prop kb)})
+                         #{prop}
+                         (elim-step1 (second (second (second '(and (not (not (if a b))) a)))) '#{a})
+                         )
+      )
+    )
+  )
 
 
 ;;Tests
@@ -197,5 +219,9 @@
 (fwd-infer2 '((and (not (not (if a b))) a)) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
 (fwd-infer2 'a '#{(if a b) (if b c)})
+
+(fwd-infer3 'a '#{(if a b) (if b c)})
+(fwd-infer3 '((if a b)) '#{(not b)})
+(fwd-infer3 '(and (not (not (if a b))) a) '#{})
 
 
