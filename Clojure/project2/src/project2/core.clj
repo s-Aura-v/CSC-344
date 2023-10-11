@@ -204,21 +204,25 @@
       (fwd-infer prop kb)
       ;;if it is empty
       (clojure.set/union (elim-step1 prop kb)
-                         (elim-step1 (second prop) '#{(elim-step1 prop kb)})
+                         (elim-step1 (second prop) '#{(nth prop 2)})
                          #{prop}
-                         (elim-step1 (second (second (second '(and (not (not (if a b))) a)))) '#{a})
+                         (elim-step1 (second (second (second prop))) '#{(nth prop 2)})
                          )
       )
     )
   )
 
-
+(second '(and (not (not (if a b))) a))
+(nth '(and (not (not (if a b))) a) 2)
+(second (second (second '(and (not (not (if a b))) a))))
 ;;Tests
 (fwd-infer2 '((if a b)) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-(fwd-infer2 '((and (not (not (if a b))) a)) '#{})
+(fwd-infer2 '(and (not (not (if a b))) a) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
 (fwd-infer2 'a '#{(if a b) (if b c)})
+
+(nth '(and (not (not (if a b))) a) 2)
 
 (fwd-infer3 'a '#{(if a b) (if b c)})
 (fwd-infer3 '((if a b)) '#{(not b)})
