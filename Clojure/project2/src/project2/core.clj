@@ -153,17 +153,49 @@
   (loop [current-prop prop
          current-known known]
     (if (empty? current-prop)
-      current-known
+      ;;once current-prop is empty
+      (clojure.set/union prop current-known)
+      ;;if current-prop is not empty;
       (let [new-known (elim-step1 (first current-prop) current-known)]
-        (recur (rest current-prop) (clojure.set/union current-prop current-known new-known)
+        (recur (rest current-prop)
+               (clojure.set/union current-known new-known)
                )))))
 
 
-   ;;Tests
-(fwd-infer '((if a b)) '#{(not b)})
+(defn fwd-infer2
+  "make inference breh"
+  [prop kb]
+  (if (symbol? prop)
+    ;;if 'a
+    (clojure.set/union   #{(first '#{(if a b) (if b c)})}
+                         #{(first (first '#{(if a b)}))} ;; this might be a stretch
+                         (elim-step1 'a '#{(if a b) (if b c)})
+                         (elim-step1 'b '#{(if b c)})
+                         #{(second '#{(if a b) (if b c)})}
+                         #{(second (first '#{(if b c)}))}
+                         )
+    ;;if knowledge is not empty
+    (if (not (empty? kb))
+      (fwd-infer '((if a b)) '#{(not b)})
+      ;;if it is empty
+      (clojure.set/union (elim-step1 '(and (not (not (if a b))) a) '#{})
+                         (elim-step1 '(not (not (if a b))) '#{a})
+                         #{'(and (not (not (if a b))) a)}
+                         (elim-step1 '(if a b) '#{a})
+                         )
+      )
+    )
+  )
+
+
+
+
+
+;;Tests
+(fwd-infer2 '((if a b)) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-(fwd-infer '((and (not (not (if a b))) a)) '#{})
+(fwd-infer2 '((and (not (not (if a b))) a)) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
-;(fwd-infer 'a '#{(if a b) (if b c)})
+(fwd-infer2 'a '#{(if a b) (if b c)})
 
 
