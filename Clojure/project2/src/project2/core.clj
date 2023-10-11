@@ -76,7 +76,6 @@
 (not (symbol? 'a))
 (nth '(if a b) 1)
 ;;part 2
-(elim-step1 'b '#{(if a b) (if b c)})
 
 
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
@@ -126,16 +125,18 @@
 ;;main test 3
 (elim-step1 'a '#{(if a b) (if b c)})
 (elim-step1 'b '#{(if a b) (if b c)})
-
 (first '#{(if a b) (if b c)})
 (symbol? 'a)
 (elim-step1 'a '#{(if a b) (if b c)} )
 (elim-step1 'b '#{(if b c)})
-(clojure.set/union  (list (first '#{(if a b) (if b c)}))
-                    (list (elim-step1 'a '#{(if a b) (if b c)}))
-                    (list (elim-step1 'b '#{(if b c)}))
-                    (list (second '#{(if a b) (if b c)}))
-                    (list (second (first '#{(if b c)})))
+(second '#{(if a b) (if b c)})
+(second (first '#{(if b c)}))
+(clojure.set/union   #{(first '#{(if a b) (if b c)})}
+                     (elim-step1 'b '#{(if a b) (if b c)}) ;; this might be a stretch
+                     (elim-step1 'a '#{(if a b) (if b c)})
+                     (elim-step1 'b '#{(if b c)})
+                     #{(second '#{(if a b) (if b c)})}
+                     #{(second (first '#{(if b c)}))}
                     )
 
 
@@ -152,9 +153,13 @@
 (clojure.set/union (elim-step1 '(and (not (not (if a b))) a) '#{})
                    (elim-step1 '(not (not (if a b))) '#{a})
                    #{'(and (not (not (if a b))) a)}
-                   (elim-step1 '(if a b) '#{a}))
+                   (elim-step1 '(if a b) '#{a})
+                   )
 
 ;;put on hold
+
+(list? '(A))
+(first '(A))
 
 
 
