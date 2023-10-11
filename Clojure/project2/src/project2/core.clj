@@ -100,18 +100,17 @@
         )
       )
     ;;if false
-    (do ;;this is causing errors because i'm doing two things at once
-      (modus-ponens2 prop (first kb))
-      (let [new-prop (modus-ponens2 prop (first kb))]
-        (modus-ponens2 (first new-prop) (second kb)))
-      )
+    (modus-ponens2 prop (first kb))
     )
   )
 
+;;    (do ;;this is causing errors because i'm doing two things at once
+;      (modus-ponens2 prop (first kb))
+;      (let [new-prop (modus-ponens2 prop (first kb))]
+;        (modus-ponens2 (first new-prop) (second kb)))
+
 ;;main test 2
 (elim-step1 'a '#{(if a b) (if b c)})
-(modus-ponens2 'a '#{(if a b) (if b c)})
-(modus-ponens2 'a '{(if a b) (if b c)})
 (elim-step1 'b '#{(if a b) (if b c)})
 (first '#{(if a b) (if b c)})
 (second '#{(if a b) (if b c)})
@@ -159,11 +158,12 @@
         (recur (rest current-prop) (clojure.set/union current-prop current-known new-known)
                )))))
 
+
    ;;Tests
 (fwd-infer '((if a b)) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
 (fwd-infer '((and (not (not (if a b))) a)) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
-(fwd-infer 'a '#{(if a b) (if b c)})
+;(fwd-infer 'a '#{(if a b) (if b c)})
 
 
