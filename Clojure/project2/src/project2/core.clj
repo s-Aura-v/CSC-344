@@ -3,7 +3,6 @@
   (:gen-class))
 
 ;;Not Elimination
-
 (defn not-elimination
   "Eliminate double-nots from a function of nots"
   [expr]
@@ -27,9 +26,7 @@
 (not-elimination '(not (not (and a b))))
 (not-elimination '(not (not (not (not c)))))
 
-
 ;;and-elimination
-
 (defn and-elimination
   "Return a vector of {a,b} if A and B"
   [and-prop]
@@ -42,10 +39,7 @@
 (and-elimination '(and a b))
 (and-elimination '(and (not (not (if a b))) a))
 
-;;modus ponens: from (if X Y) and X, infer Y
-
-
-;;modus ponens2
+;;modus ponens2 from (if X Y) and X, infer Y
 (defn modus-ponens2
   "Infer x from if (X Y) and X"
   [if-prop kb]
@@ -67,19 +61,11 @@
 (modus-ponens2 '(if A B) '#{A})
 (modus-ponens2 '(if a b) '#{a})
 (modus-ponens2 '(if A B) '#{B})
-
-(second '(if A B))
-
+;;Backwards tests
 (modus-ponens2 'a '(if a b))
-(modus-ponens2 'b '(if a b))
-(= 'a (second '(if a b)))
-(not (symbol? 'a))
-(nth '(if a b) 1)
-;;part 2
-
+(modus-ponens2 'b '(if b c))
 
 ;;modus tollens: from (if X Y) and (not Y), infer (not X)
-
 (defn modus-tollens
   "Evaluate (not A) from if (A B) and (not B)"
   [if-prop kb]
@@ -92,11 +78,7 @@
 (modus-tollens '(if A B) '#{(not A)})
 (modus-tollens '(if A B) '#{(not B)})
 
-(second (first '#{(not A)}))
-
 ;Elim-step
-
-
 (defn elim-step1
   "One step of the elimination inference procedure."
   [prop kb]
@@ -118,21 +100,29 @@
         )
       )
     ;;if false
+    (do ;;this is causing errors because i'm doing two things at once
       (modus-ponens2 prop (first kb))
+      (let [new-prop (modus-ponens2 prop (first kb))]
+        (modus-ponens2 (first new-prop) (second kb)))
       )
     )
+  )
 
-;;main test 3
+;;main test 2
 (elim-step1 'a '#{(if a b) (if b c)})
+(modus-ponens2 'a '#{(if a b) (if b c)})
+(modus-ponens2 'a '{(if a b) (if b c)})
 (elim-step1 'b '#{(if a b) (if b c)})
 (first '#{(if a b) (if b c)})
+(second '#{(if a b) (if b c)})
+
 (symbol? 'a)
 (elim-step1 'a '#{(if a b) (if b c)} )
 (elim-step1 'b '#{(if b c)})
 (second '#{(if a b) (if b c)})
 (second (first '#{(if b c)}))
 (clojure.set/union   #{(first '#{(if a b) (if b c)})}
-                     (elim-step1 'b '#{(if a b) (if b c)}) ;; this might be a stretch
+                     #{(first (first '#{(if a b)}))} ;; this might be a stretch
                      (elim-step1 'a '#{(if a b) (if b c)})
                      (elim-step1 'b '#{(if b c)})
                      #{(second '#{(if a b) (if b c)})}
@@ -156,14 +146,6 @@
                    (elim-step1 '(if a b) '#{a})
                    )
 
-;;put on hold
-
-(list? '(A))
-(first '(A))
-
-
-
-
 ;;Infer fwd
 
 (defn fwd-infer
@@ -174,7 +156,7 @@
     (if (empty? current-prop)
       current-known
       (let [new-known (elim-step1 (first current-prop) current-known)]
-        (recur (rest current-prop) (clojure.set/union current-known new-known)
+        (recur (rest current-prop) (clojure.set/union current-prop current-known new-known)
                )))))
 
    ;;Tests
@@ -182,9 +164,6 @@
 ;;#{(if a b) (not a) (not b)}
 (fwd-infer '((and (not (not (if a b))) a)) '#{})
 ;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
-
-
-
-;(fwd-infer 'a '#{(if a b) (if b c)})
+(fwd-infer 'a '#{(if a b) (if b c)})
 
 
