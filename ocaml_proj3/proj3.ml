@@ -66,38 +66,36 @@
    
    
    
-   let rec parse_E () =
-    let a1 = parse_A () in
-    let t = lookahead () in
-    match t with
-      Tok_Sum ->
-       match_tok Tok_Sum;
-       let a2 = parse_E () in
-         Sum(a1,a2)
-     | _ -> a1 		(* E -> A *)
-  
+
+    let rec parse_E () =
+      let a1 = parse_T () in (*changed to parseT to get mult*)
+      let t = lookahead () in
+      match t with
+        Tok_Sum ->
+         match_tok Tok_Sum;
+         let a2 = parse_E () in
+           Sum(a1,a2)
+       | _ -> a1 		(* E -> A *)
      
-    
-  and parse_T () = (*Added mult*)
-    let a1 = parse_A () in 
-    let t = lookahead () in
-    match t with
-      Tok_Mul ->
-        match_tok Tok_Mul;
-        let a2 = parse_E () in
-          Mul(a1,a2)
-     | _ -> a1    
-    
-   
-   and parse_A () =
-    let t = lookahead () in
-    match t with
-      Tok_Num c ->
-       let _= match_tok (Tok_Num c) in
-         Num (int_of_string (Char.escaped c))
-    | _ -> raise (ParseError "parse_A")
-   
-   
+       and parse_T () = (*Added mult*)
+        let a1 = parse_A () in (*Changed to parseA cuz that's the next*)
+        let t = lookahead () in
+        match t with
+        Tok_Mul ->
+          match_tok Tok_Mul;
+          let a2 = parse_E () in
+            Mul(a1,a2)
+       | _ -> a1
+       
+     and parse_A () =
+      let t = lookahead () in
+      match t with
+        Tok_Num c ->
+         let _= match_tok (Tok_Num c) in
+           Num (int_of_string (Char.escaped c))
+      | _ -> raise (ParseError "parse_A")
+     
+        
    let parse str =
     tok_list := (tokenize str);
     let exp = parse_E () in
@@ -129,5 +127,5 @@
     v
    ;;
     
-    eval_str "1*2*3"
-   ;;
+    eval_str "1+2+3*4+5+6"
+   ;; 
