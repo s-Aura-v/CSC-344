@@ -1,2 +1,2 @@
-camlc -o proj3 -I +str str.cma proj3.ml
+ocamlc -o proj3 -I +str str.cma proj3.ml
 ./proj3

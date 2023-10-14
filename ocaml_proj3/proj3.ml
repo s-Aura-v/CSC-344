@@ -29,7 +29,9 @@
              (Tok_Num token.[0])::(tok (pos+1) s)
          else if (Str.string_match re_add s pos) then
            Tok_Sum::(tok (pos+1) s)
-         else
+         else if (Str.string_match re_mul s pos) then (*Added mul*)
+           Tok_Mul::(tok (pos+1) s )
+         else 
            raise (IllegalExpression "tokenize")
        in
        tok 0 str
@@ -38,11 +40,13 @@
    
    type exp = Num of int
     | Sum of exp * exp
+    | Mul of exp * exp
    
    let rec a_to_str a =
     match a with
       Num n -> string_of_int n 
     | Sum (a1,a2) -> "(" ^ (a_to_str a1) ^ " + " ^ (a_to_str a2) ^ ")"
+    | Mul (a1,a2) ->  "(" ^ (a_to_str a1) ^ " * " ^ (a_to_str a2) ^ ")" (*Added mul*)
    ;;
    
    let tok_list = ref []
@@ -71,6 +75,19 @@
        let a2 = parse_E () in
          Sum(a1,a2)
      | _ -> a1 		(* E -> A *)
+  
+     
+    
+  and parse_T () = (*Added mult*)
+    let a1 = parse_A () in 
+    let t = lookahead () in
+    match t with
+      Tok_Mul ->
+        match_tok Tok_Mul;
+        let a2 = parse_E () in
+          Mul(a1,a2)
+     | _ -> a1    
+    
    
    and parse_A () =
     let t = lookahead () in
@@ -112,5 +129,5 @@
     v
    ;;
     
-    eval_str "1+2+3+4+5"
+    eval_str "1*2*3"
    ;;
