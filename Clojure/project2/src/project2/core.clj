@@ -81,11 +81,9 @@
 ;;Relevant-kb for modus-ponens2
 (defn relevant-kb [ant kb]
   (for [prop kb :when (and (seq? prop) (= (second prop) ant))] prop))
+;;tests
 (relevant-kb 'b '#{(if a b) (if b c)})
-
-;=> ((if b c))
 (relevant-kb 'a '#{(if a b) (if b c)})
-;=> ((if a b))
 
 
 ;Elim-step
@@ -110,36 +108,10 @@
         )
       )
     ;;if false
-    (modus-ponens2 prop (first (relevant-kb prop kb)))
+        (modus-ponens2 prop (first (relevant-kb prop kb)))
+      )
     )
-  )
-
-
 ;;main test 2
-(elim-step1 'a '#{(if a b) (if b c)})
-(elim-step1 'b '#{(if a b) (if b c)})
-(relevant-kb 'b '#{(if a b) (if b c)})
-(modus-ponens2 'b (first (relevant-kb 'b '#{(if a b) (if b c)})))
-(modus-ponens2 'b '(if b c))
-
-
-(first (relevant-kb 'b '#{(if a b) (if b c)}))
-
-#{(first (relevant-kb 'b '#{(if a b) (if b c)}))}
-
-(symbol? 'a)
-(elim-step1 'a '#{(if a b) (if b c)} )
-(elim-step1 'b '#{(if b c)})
-(second '#{(if a b) (if b c)})
-(second (first '#{(if b c)}))
-(clojure.set/union   #{(first '#{(if a b) (if b c)})}
-                     #{(first (first '#{(if a b)}))} ;; this might be a stretch
-                     (elim-step1 'a '#{(if a b) (if b c)})
-                     (elim-step1 'b '#{(if b c)})
-                     #{(second '#{(if a b) (if b c)})}
-                     #{(second (first '#{(if b c)}))}
-                     )
-
 
 ;;test 1: works! [other than having prop]
 ;(fwd-infer '((if a b)) '#{(not b)})
@@ -166,16 +138,25 @@
          current-known known]
     (if (empty? current-prop)
       current-known
-
       (let [new-known (elim-step1 (first current-prop) current-known)]
-        (recur (rest current-prop) (clojure.set/union current-prop current-known new-known)
-               )))))
-
+        (recur  (rest current-prop)
+                (if (not (symbol? prop))
+                  (clojure.set/union current-prop current-known new-known)
+                  (clojure.set/union current-prop
+                                     (elim-step1 (second (second known))
+                                                   known)
+                                     current-known new-known)
+                  )
+                )))))
 
 ;;Tests
 (fwd-infer '(if a b) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
-(fwd-infer '(and (not (not (if a b))) a) '#{})
-;; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
 (fwd-infer 'a '#{(if a b) (if b c)})
 ;;{(if a b) a c (if b c) b}
+
+
+(fwd-infer '(and (not (not (if a b))) a) '#{})
+; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
+
+
