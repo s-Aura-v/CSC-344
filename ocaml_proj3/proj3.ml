@@ -9,17 +9,19 @@
    (***** Scanner *****)
    
    type token = Tok_Num of char 
-     | Tok_Sum 
+     | Tok_Sum
+     | Tok_Mul  (*A new token that looks for multiplication*)
      | Tok_END
    
    let re_num = Str.regexp "[0-9]"
    let re_add = Str.regexp "+"
+   let re_mul = Str.regexp "*"
    
    exception IllegalExpression of string
    
    let tokenize str =
      let rec tok pos s =
-       if pos >= String.length s then
+       if pos >= String.length s then (* if the position is at the end, end the token*)
          [Tok_END]
        else
          if (Str.string_match re_num s pos) then
@@ -94,6 +96,7 @@
     match a with
       Num n -> n
     | Sum (a1,a2) -> (eval a1) + (eval a2)
+    | Mul (a1,a2) -> (eval a1) * (eval a2)
    ;;
    
    
