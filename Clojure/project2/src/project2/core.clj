@@ -141,13 +141,21 @@
       (let [new-known (elim-step1 (first current-prop) current-known)]
         (recur  (rest current-prop)
                 (if (not (symbol? prop))
-                  (clojure.set/union current-prop current-known new-known)
+                  (if (not (empty? known))
+                    (clojure.set/union current-prop current-known new-known)
+                    (clojure.set/union
+
+                      current-prop current-known new-known)
+                    )
                   (clojure.set/union current-prop
                                      (elim-step1 (second (second known))
                                                    known)
                                      current-known new-known)
                   )
                 )))))
+
+
+
 
 ;;Tests
 (fwd-infer '(if a b) '#{(not b)})
