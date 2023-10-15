@@ -28,7 +28,7 @@
        else
          if (Str.string_match re_num s pos) then  (*Edited for higher than 9*)
            let token = Str.matched_string s in
-             (Tok_Num token)::(tok (pos + (String.length token)) s)
+             (Tok_Num token)::(tok (pos + (String.length token)) s)  (*string.length so it goes to the end of the string rather than just one position ahead*)
          else if (Str.string_match re_add s pos) then
            Tok_Sum::(tok (pos + (1)) s)
          else if (Str.string_match re_mul s pos) then (*Added mul*)
@@ -82,7 +82,7 @@
         match t with
         Tok_Mul ->
           match_tok Tok_Mul;
-          let a2 = parse_E () in
+          let a2 = parse_T () in 
             Mul(a1,a2)
        | _ -> a1
        
@@ -122,9 +122,14 @@
     let v = eval e in
     print_string "Value of AST = " ;
     print_int v ;
-    print_endline "";
+    print_endline "\n";
     v
    ;;
     
-    eval_str "10*222"
+   (*Tests *)
+    ignore (eval_str "2*5");
+    ignore (eval_str "1*10");
+    ignore (eval_str "5*4+2");
+    ignore (eval_str "10+20+30");
+    ignore (eval_str "10+2*5+45");
    ;; 
