@@ -144,7 +144,6 @@
                   (if (not (empty? known))
                     (clojure.set/union current-prop current-known new-known)
                     (clojure.set/union
-
                       current-prop current-known new-known)
                     )
                   (clojure.set/union current-prop

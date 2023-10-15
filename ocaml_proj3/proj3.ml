@@ -1,19 +1,21 @@
 (* Modified in part from CSMC330 at UMD *)
 
 (* Parser for
-   E -> A + E | A
-   A -> 0|1|2|3|4|5|6|7|8|9 *)
+  E -: T '+' E | T
+  T -: A '*' T | A
+  A -: [0-9]+ *)
 
    open Str
    
    (***** Scanner *****)
    
-   type token = Tok_Num of char 
+   type token = 
+     Tok_Num of string  (*char -> string*)
      | Tok_Sum
      | Tok_Mul  (*A new token that looks for multiplication*)
      | Tok_END
    
-   let re_num = Str.regexp "[0-9]"
+   let re_num = Str.regexp "[0-9]+"
    let re_add = Str.regexp "+"
    let re_mul = Str.regexp "*"
    
@@ -24,13 +26,13 @@
        if pos >= String.length s then (* if the position is at the end, end the token*)
          [Tok_END]
        else
-         if (Str.string_match re_num s pos) then
+         if (Str.string_match re_num s pos) then  (*Edited for higher than 9*)
            let token = Str.matched_string s in
-             (Tok_Num token.[0])::(tok (pos+1) s)
+             (Tok_Num token)::(tok (pos + (String.length token)) s)
          else if (Str.string_match re_add s pos) then
-           Tok_Sum::(tok (pos+1) s)
+           Tok_Sum::(tok (pos + (1)) s)
          else if (Str.string_match re_mul s pos) then (*Added mul*)
-           Tok_Mul::(tok (pos+1) s )
+           Tok_Mul::(tok (pos + (1)) s )
          else 
            raise (IllegalExpression "tokenize")
        in
@@ -63,9 +65,6 @@
     (* checks lookahead; advances on match *)
     | (h::t) when a = h -> tok_list := t
     | _ -> raise (ParseError "bad match")
-   
-   
-   
 
     let rec parse_E () =
       let a1 = parse_T () in (*changed to parseT to get mult*)
@@ -92,7 +91,7 @@
       match t with
         Tok_Num c ->
          let _= match_tok (Tok_Num c) in
-           Num (int_of_string (Char.escaped c))
+           Num (int_of_string c) (*Changed to just int_of_string since it's not a char anymore*)
       | _ -> raise (ParseError "parse_A")
      
         
@@ -127,5 +126,5 @@
     v
    ;;
     
-    eval_str "1+2+3*4+5+6"
+    eval_str "10*222"
    ;; 
