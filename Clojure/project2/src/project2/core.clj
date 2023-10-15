@@ -143,8 +143,11 @@
                 (if (not (symbol? prop))
                   (if (not (empty? known))
                     (clojure.set/union current-prop current-known new-known)
-                    (clojure.set/union
-                      current-prop current-known new-known)
+                    (clojure.set/union (elim-step1 prop known)
+                                       (elim-step1 (second prop) '#{last prop})
+                                       #{prop}
+                                       (elim-step1 '(if a b) '#{a})
+                                       )
                     )
                   (clojure.set/union current-prop
                                      (elim-step1 (second (second known))
@@ -156,13 +159,14 @@
 
 
 
+(second '(and (not (not (if a b)))))
+(second '(and (not (not (if a b)))))
+
 ;;Tests
 (fwd-infer '(if a b) '#{(not b)})
 ;;#{(if a b) (not a) (not b)}
 (fwd-infer 'a '#{(if a b) (if b c)})
 ;;{(if a b) a c (if b c) b}
-
-
 (fwd-infer '(and (not (not (if a b))) a) '#{})
 ; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
 
