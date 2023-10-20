@@ -85,7 +85,6 @@
 (relevant-kb 'b '#{(if a b) (if b c)})
 (relevant-kb 'a '#{(if a b) (if b c)})
 
-
 ;Elim-step
 (defn elim-step1
   "One step of the elimination inference procedure."
@@ -94,43 +93,28 @@
   (if (not (symbol? prop)) ;;if prop is a not symbol
     ;;if true
     (if (and (list? prop) (= 'not (first prop)))
-      (not-elimination prop)
+      (clojure.set/union kb (not-elimination prop))
       ;;and-elimination
       (if (and (list? prop) (= 'and (first prop)))
-        (and-elimination prop)
+        (clojure.set/union kb (and-elimination prop))
         ;;if X Y and X infer Y
         (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))
           ;; if it has a not, do tollens
-          (modus-tollens prop kb)
+          (clojure.set/union kb (modus-tollens prop kb))
           ;;if not, do ponens
-          (modus-ponens2 prop kb)
+          (clojure.set/union kb(modus-ponens2 prop kb))
           )
         )
       )
     ;;if false
-        (modus-ponens2 prop (first (relevant-kb prop kb)))
+    (clojure.set/union
+      (modus-ponens2 prop (first (relevant-kb prop kb)))
+      (modus-ponens2 'b (first (relevant-kb 'b kb)))
+      )
       )
     )
-;;main test 2
-
-;;test 1: works! [other than having prop]
-;(fwd-infer '((if a b)) '#{(not b)})
-(elim-step1 '(if a b) '#{(not b)})
-(first '#{(not b)})
-(first (first '#{(not b)}))
-
-;;Test 3
-(elim-step1 '(and (not (not (if a b))) a) '#{})
-(elim-step1 '(not (not (if a b))) '#{a})
-(elim-step1 '(if a b) '#{a})
-(clojure.set/union (elim-step1 '(and (not (not (if a b))) a) '#{})
-                   (elim-step1 '(not (not (if a b))) '#{a})
-                   #{'(and (not (not (if a b))) a)}
-                   (elim-step1 '(if a b) '#{a})
-                   )
 
 ;;Infer fwd
-
 (defn fwd-infer
   "Make logical inferences based on propositions"
   [prop known]
@@ -139,28 +123,18 @@
     (if (empty? current-prop)
       current-known
       (let [new-known (elim-step1 (first current-prop) current-known)]
-        (recur  (rest current-prop)
-                (if (not (symbol? prop))
-                  (if (not (empty? known))
-                    (clojure.set/union current-prop current-known new-known)
-                    (clojure.set/union (elim-step1 prop known)
-                                       (elim-step1 (second prop) '#{last prop})
-                                       #{prop}
-                                       (elim-step1 '(if a b) '#{a})
-                                       )
-                    )
-                  (clojure.set/union current-prop
-                                     (elim-step1 (second (second known))
-                                                   known)
-                                     current-known new-known)
-                  )
-                )))))
+        (recur (rest current-prop)
+               (if (not (empty? known))
+                 (clojure.set/union current-prop current-known new-known)
+                 (clojure.set/union (elim-step1 prop known)
+                                    (elim-step1 (second prop) '#{})
+                                    #{prop}
+                                    (elim-step1 (second (second (second prop))) #{(last prop)})
+                                    )
+                 )))))
+  )
 
-
-
-
-(second '(and (not (not (if a b)))))
-(second '(and (not (not (if a b)))))
+(last '(and (not (not (if a b))) a))
 
 ;;Tests
 (fwd-infer '(if a b) '#{(not b)})

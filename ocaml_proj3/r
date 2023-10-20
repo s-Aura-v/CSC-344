@@ -1,2 +1,2 @@
-ocamlc -o proj3 -I +str str.cma proj3.ml
-./proj3
+ocamlc -o mainproj3 -I +str str.cma mainproj3.ml
+./mainproj3
