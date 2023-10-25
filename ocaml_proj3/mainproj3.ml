@@ -38,8 +38,8 @@ let tokenize str =
     if pos >= String.length s then
       [Tok_END]
     else if (Str.string_match re_alphabet s pos) then
-      let token = Str.matched_string s in
-      (Tok_Char (token.[0])) :: (tok (pos + (String.length token)) s)
+      let token = String.get s pos in
+      (Tok_Char token)::(tok (pos + 1) s)
     else if (Str.string_match re_or s pos) then
       Tok_OR :: (tok (pos + 1) s)
     else if (Str.string_match re_q s pos) then
@@ -53,7 +53,9 @@ let tokenize str =
   in
   tok 0 str
 
-
+(*How to test:
+   tokenize "abc"
+   *)
 (*Parser*)
 
 type re =
@@ -76,12 +78,18 @@ type re =
     | (h::t) when a = h -> tok_list := t
     | _ -> raise (ParseError "bad match")
 
-    
+
+
   
 
 
-
-
+    let parse_C () =
+      let t = lookahead () in
+      match t with 
+       Tok_Char (c) ->
+        let _= match_tok (Tok_Char c) in
+         C(c)
+        | _ -> raise (ParseError "C(c) error")
 
 
 
