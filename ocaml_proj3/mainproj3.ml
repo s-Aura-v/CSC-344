@@ -11,7 +11,6 @@ C -: '0' | '1' | ... | '9'| 'a' | 'b' | ... | 'z' | '.'
  C  -: Alphanumeric characters plus '.'
 *)
 
-
 #directory "+str"
 #load "str.cma"
 open Str
@@ -54,14 +53,38 @@ let tokenize str =
   in
   tok 0 str
 
-(* AST Types *)
+
+(*Parser*)
+
 type re =
   | C of char
   | Concat of re * re
   | Optional of re
   | Alternation of re * re
 
-let tok_list = ref []
+  let tok_list = ref []
+  exception ParseError of string
+
+  let lookahead () =
+    match !tok_list with
+      [] -> raise (ParseError "no tokens")
+    | (h::t) -> h
+
+  let match_tok a =
+     match !tok_list with
+    (* checks lookahead; advances on match *)
+    | (h::t) when a = h -> tok_list := t
+    | _ -> raise (ParseError "bad match")
+
+    
+  
 
 
 
+
+
+
+
+
+
+(*Matcher*)
