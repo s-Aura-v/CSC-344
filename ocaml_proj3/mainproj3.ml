@@ -78,20 +78,50 @@ type re =
     | (h::t) when a = h -> tok_list := t
     | _ -> raise (ParseError "bad match")
 
-
-
   
-
-
-    let parse_C () =
-      let t = lookahead () in
-      match t with 
-       Tok_Char (c) ->
-        let _= match_tok (Tok_Char c) in
-         C(c)
-        | _ -> raise (ParseError "C(c) error")
-
-
+    let rec parse_S () =
+      let e = parse_E () in
+      match lookahead () with
+      | Tok_END -> e
+      | _ -> raise (ParseError "S($) error")
+    
+    and parse_E () =
+      let t = parse_T () in
+      match lookahead () with
+      | Tok_OR ->
+        let _ = match_tok Tok_OR in
+        let e = parse_E () in
+        Alternation (t, e)
+      | _ -> t
+    
+    and parse_T () =
+      let f = parse_F () in
+      match lookahead () with
+      | Tok_Char _ | Tok_LPAREN ->
+        let t = parse_T () in
+        Concat (f, t)
+      | _ -> f
+    
+    and parse_F () =
+      let a = parse_A () in
+      match lookahead () with
+      | Tok_Q ->
+        let _ = match_tok Tok_Q in
+        Optional a
+      | _ -> a
+    
+    and parse_A () =
+      match lookahead () with
+      | Tok_Char c ->
+        let _ = match_tok (Tok_Char c) in
+        C c
+      | Tok_LPAREN ->
+        let _ = match_tok Tok_LPAREN in
+        let e = parse_E () in
+        let _ = match_tok Tok_RPAREN in
+        e
+      | _ -> raise (ParseError "A error")
+    
 
 
 
