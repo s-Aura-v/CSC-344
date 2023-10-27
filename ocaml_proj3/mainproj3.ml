@@ -24,15 +24,16 @@ type token =
   | Tok_RPAREN
   | Tok_END
 
-let re_alphabet = Str.regexp "[A-Za-z0-9]+"  (* Make the regex case-insensitive *)
+let re_alphabet = Str.regexp "[A-Za-z0-9 .]+"  (* Make the regex case-insensitive *)
 let re_or = Str.regexp "|"
 let re_q = Str.regexp "?"
 let re_lparen = Str.regexp "("
 let re_rparen = Str.regexp ")"
+
 (* Define a custom exception for parsing errors *)
 exception ParseError of string
 
-(* Tokenize the input regular expression string *)
+(* Tokenize the input regular expression string *) 
 let tokenize str =
   let rec tok pos s =
     if pos >= String.length s then
@@ -122,7 +123,22 @@ type re =
         e
       | _ -> raise (ParseError "A error")
     
-
+      let parse str =
+        tok_list := (tokenize str);
+        let exp = parse_S () in
+        if !tok_list <> [Tok_END] then
+          raise (ParseError "parse_E")
+        else
+          exp
+       ;;
+    
 
 
 (*Matcher*)
+(* 
+let rec eval a =
+  match a with 
+  | Char c -> c
+  |
+  |
+  | *)
