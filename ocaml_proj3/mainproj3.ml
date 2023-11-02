@@ -24,7 +24,7 @@ type token =
   | Tok_RPAREN
   | Tok_END
 
-let re_alphabet = Str.regexp "[A-Za-z0-9 .]+"  (* Make the regex case-insensitive *)
+let re_alphabet = Str.regexp "[A-Za-z0-9 .]+"  (* Make the regex case-insensitive + add space and period *)
 let re_or = Str.regexp "|"
 let re_q = Str.regexp "?"
 let re_lparen = Str.regexp "("
@@ -133,13 +133,12 @@ type re =
        ;;
     
 
-
 (*Matcher*)
 
 let rec eval_pattern pattern input pos =
   match pattern with
   | C c ->
-    if pos < String.length input && input.[pos] = c then
+    if pos < String.length input && (input.[pos] = c || c = '.') then
       Some (pos + 1)
     else
       None
@@ -166,14 +165,14 @@ let rec eval_pattern pattern input pos =
 let match_pattern pattern input =
   match eval_pattern pattern input 0 with
   | Some pos when pos = String.length input -> print_endline "match"
-  | _ -> print_endline "no match"
+  | _ -> print_endlines "no match"
 ;;
 
 let pattern = "I (like|love|hate)( (cat|dog))? people"
-let string = "I like cat people"
+let string = "2"
 
-let pattern_ast = parse pattern
-let is_match = match_pattern pattern_ast string
+let pattern = parse pattern
+let is_match = match_pattern pattern string
 
 
 
