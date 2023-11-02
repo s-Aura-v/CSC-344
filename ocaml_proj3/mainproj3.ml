@@ -136,42 +136,60 @@ type re =
 
 (*Matcher*)
 
-let rec eval_pattern pattern str =
-  let pos = ref 0 in
-  let rec input_pattern pos = 
-    let match pos with
-  match pos with 
+let rec eval_pattern pattern input pos =
+  match pattern with
   | C c ->
-    if (Char.equal str.[pos])
-
-  | Concat(p1, p2) ->     
-  
+    if pos < String.length input && input.[pos] = c then
+      Some (pos + 1)
+    else
+      None
+  | Concat (p1, p2) ->
+    begin
+      match eval_pattern p1 input pos with
+      | Some new_pos -> eval_pattern p2 input new_pos
+      | None -> None
+    end
   | Optional p ->
-  
-  | Alternation(p1, p2) ->
-    if 
+    begin
+      match eval_pattern p input pos with
+      | Some new_pos -> Some new_pos
+      | None -> Some pos
+    end
+  | Alternation (p1, p2) ->
+    let try_p1 = eval_pattern p1 input pos in
+    if try_p1 <> None then
+      try_p1
+    else
+      eval_pattern p2 input pos
+;;
 
-      /
+let match_pattern pattern input =
+  match eval_pattern pattern input 0 with
+  | Some pos when pos = String.length input -> print_endline "match"
+  | _ -> print_endline "no match"
+;;
 
+let pattern = "I (like|love|hate)( (cat|dog))? people"
+let string = "I like cat people"
 
-    
-
-let pattern str =
-  let ast = parse str in 
-  fun input -> eval_pattern ast input 0;;
-
-let string string = 
-  let ast = string in
-  fun input -> eval_pattern ast input 1;;
-
-
-
-
-
-
-
-
-
-
+let pattern_ast = parse pattern
+let is_match = match_pattern pattern_ast string
 
 
+
+(*Test Inputs
+let pattern = "I (like|love|hate)( (cat|dog))? people"
+let string = "I like cat people"
+let string = "I love dog people"
+let string = "I hate people"
+let string = "I likelovehate people"
+let string = "I people"
+
+let pattern = "((h|j)ell. worl?d)|(42)"
+let string = "hello world"
+let string = "jello word"
+let string = "jelly word"
+let string = "42"
+let string = "24"
+let string = "hello world42"
+*)
