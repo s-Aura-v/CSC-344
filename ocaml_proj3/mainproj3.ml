@@ -84,7 +84,7 @@ type re =
       let e = parse_E () in
       match lookahead () with
       | Tok_END -> e
-      | _ -> raise (ParseError "S($) error")
+      | _ -> raise (ParseError "S error")
     
     and parse_E () =
       let t = parse_T () in
@@ -127,7 +127,7 @@ type re =
         tok_list := (tokenize str);
         let exp = parse_S () in
         if !tok_list <> [Tok_END] then
-          raise (ParseError "parse_E")
+          raise (ParseError "parse_S")
         else
           exp
        ;;
@@ -135,10 +135,43 @@ type re =
 
 
 (*Matcher*)
-(* 
-let rec eval a =
-  match a with 
-  | Char c -> c
-  |
-  |
-  | *)
+
+let rec eval_pattern pattern str =
+  let pos = ref 0 in
+  let rec input_pattern pos = 
+    let match pos with
+  match pos with 
+  | C c ->
+    if (Char.equal str.[pos])
+
+  | Concat(p1, p2) ->     
+  
+  | Optional p ->
+  
+  | Alternation(p1, p2) ->
+    if 
+
+      /
+
+
+    
+
+let pattern str =
+  let ast = parse str in 
+  fun input -> eval_pattern ast input 0;;
+
+let string string = 
+  let ast = string in
+  fun input -> eval_pattern ast input 1;;
+
+
+
+
+
+
+
+
+
+
+
+
