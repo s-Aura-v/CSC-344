@@ -1,0 +1,2 @@
+cat Desktop/EEATO/Oswego\ Fall\ 2023/CSC\ 344/ASP_Proj4/MicroProject.lp | clingo -c n=8 0
+
