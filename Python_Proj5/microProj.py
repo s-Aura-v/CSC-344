@@ -1,10 +1,10 @@
 # Microproject 1:
 # Compile using: py3compile microProj.py
-# Run using: python [name inside __cache__]
+# Run using: python3 [name inside __cache__]
 import os
 
 # Get the file directory:
-# /Users/survive/Desktop/EEATO/23Fall/CSC\ 344/python_Proj5/testFiles
+# /Users/survive/Desktop/EEATO/23Fall/CSC344/python_Proj5/testFiles
 # /home/slamich2/CSC344/python_Proj2
 fileDirectory = input("Enter the file directory: ")
 
