@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="80e9ffb5-49d6-4910-8994-65bf993049c6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/summaryProject.py" beforeDir="false" afterPath="$PROJECT_DIR$/summaryProject.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../csc344/a4/summary_a4.html" beforeDir="false" afterPath="$PROJECT_DIR$/../csc344/a4/summary_a4.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -159,7 +157,7 @@
       <workItem from="1700202989527" duration="1791000" />
       <workItem from="1700242587056" duration="3193000" />
       <workItem from="1700254776133" duration="4494000" />
-      <workItem from="1700416031634" duration="1588000" />
+      <workItem from="1700416031634" duration="2075000" />
     </task>
     <servers />
   </component>
@@ -171,27 +169,27 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/summaryProject.py</url>
-          <line>12</line>
+          <line>22</line>
           <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/summaryProject.py</url>
-          <line>24</line>
+          <line>35</line>
           <option name="timeStamp" value="17" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/summaryProject.py</url>
-          <line>22</line>
+          <line>33</line>
           <option name="timeStamp" value="18" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/summaryProject.py</url>
-          <line>5</line>
+          <line>15</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/summaryProject.py</url>
-          <line>7</line>
+          <line>17</line>
           <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>

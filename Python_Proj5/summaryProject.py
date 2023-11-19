@@ -1,7 +1,17 @@
 # Write a Python program that collects, summarizes, and e-mails all the programming assignments for this course.
 import os
 
-def createKeywordList(programName, currentDirectory):
+def writeList(identifiers, summaryFile):
+    summaryFile.write("<p> Here are the ordered list of identifiers: </p>")
+    summaryFile.write("<ol> \n")
+
+    for identifier in identifiers:
+        summaryFile.write("<li> " + identifier + " </li>\n")
+
+    summaryFile.write("</ol> \n")
+
+
+def createKeywordList(programName, summaryFile):
     # Clojure
     programFile = open(programName, "r")
     programSuffix = programName[-3:];
@@ -11,6 +21,7 @@ def createKeywordList(programName, currentDirectory):
             for line in file:
                 if "defn" in line:
                     identifiers.append(line.split()[1])
+
     # Mostly works: Add TOK_Identifiers and remove comments + remove Some
     elif (programSuffix == ".ml"):
         identifiers = set()
@@ -28,8 +39,10 @@ def createKeywordList(programName, currentDirectory):
         # identifiers.sort()
         identifiersList = list(identifiers)
         identifiersList.sort()
-        print(identifiersList)
-
+        writeList(identifiersList, summaryFile)
+    elif (programSuffix == "clj"):
+        identifiers.sort()
+        writeList(identifiers, summaryFile)
 
 
 
@@ -49,7 +62,7 @@ def summarize(summaryFile, programName, currentDirectory):
     summaryFile.write("<h4> Summary of " + programName + "</h4>\n")
     summaryFile.write("<p> The number of lines are: " + str(numOfLines) + "</p>\n")
 
-    createKeywordList(programName, currentDirectory)
+    createKeywordList(programName, summaryFile)
 
 # Set Directory
 # /Users/survive/Desktop/EEATO/23Fall/CSC 344/csc344
