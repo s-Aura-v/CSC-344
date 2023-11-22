@@ -1,9 +1,9 @@
 %Main Project: Social Distancing Simulator
 % Facts 1
-#const n1=24.
-#const n2=24.
-#const startX=13.
-#const d=5. 
+#const n1 = 24.
+#const n2 = 24.
+#const startX = 13.
+#const d = 5. 
 person(20, 4).
 person(13, 7).
 person(4, 19).

@@ -43,6 +43,7 @@ def createKeywordList(programName, summaryFile):
                 pattern = r'^\w+\(.+,.+\).+$'  # Regular expression pattern
                 if re.match(pattern, line):
                     var = line[0: (line.index("("))]
+                    print(var)
                     identifersLP.add(var)
                 if "=" in line:
                     identifersLP.add(line.split()[1])
@@ -53,25 +54,19 @@ def createKeywordList(programName, summaryFile):
             for line in file:
                 # print(line, end="")
                 if "=" in line:
-                    lineList = line.split()
-                    if ("=" in lineList):
-                        equalIndex = lineList.index("=")
-                        identifiersC.add(line.split()[equalIndex - 1])
+                    var = line.split()
+                    if ("=" in var):
+                        var2 = var.index("=")
+                        identifiersC.add(line.split()[var2 - 1])
     # Python
     elif (programSuffix == ".py"):
         identifersPY = set()
         with programFile as file:
             for line in file:
                 if "def" in line:
-                    identifersPY.add(line.split()[1])
-                if "=" in line:
-                    lineList = line.split()
-                    if ("=" in lineList):
-                        equalIndex = lineList.index("=")
-                        identifersPY.add(line.split()[equalIndex - 1])
-                if "with" in line:
-                    identifersPY.add(line.split()[1])
-                    identifersPY.add(line.split()[3])
+                    print(line, end="")
+                    print(line.split()[1])
+                    identifersPY.append(line.split()[1])
 
 
 
