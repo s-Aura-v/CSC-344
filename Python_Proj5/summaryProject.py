@@ -31,11 +31,42 @@ def createKeywordList(programName, summaryFile):
     programFile = open(programName, "r")
     programSuffix = programName[-3:];
     if (programSuffix == "clj"):
-        identifiers = []
+        identifiersCLJ = set()
         with programFile as file:
             for line in file:
+                print(line, end="")
+                if ";;" in line:
+                    continue
                 if "defn" in line:
-                    identifiers.append(line.split()[1])
+                    identifiersCLJ.add(line.split()[1])
+                if "let" in line or "for" in line:
+                    print(line.split()[1][1:])
+                    identifiersCLJ.add(line.split()[1][1:])
+                if "[" in line:
+                    if line.split()[0][0] == "[":
+                        # print(line.split()[0][1: len(line.split()[0]) - 1])
+                        if len(line.split()) < 1:
+                            identifiersCLJ.add(line.split()[0][1: len(line.split()[0]) - 1])
+                        if len(line.split()) > 1:
+                            identifiersCLJ.add(line.split()[0][1:])
+                            identifiersCLJ.add(line.split()[1][0: line.split()[1].index("]")])
+                if ("[" in line and "]" not in line):
+                    identifiersCLJ.add(line.split()[1][1:])
+                    identifiersCLJ.add(line.split()[2][2:6])
+                    # print(line.split()[1][1:])
+                    # print(line.split()[2][2:6])
+                if ("]" in line and "[" not in line):
+                    identifiersCLJ.add(line.split()[0])
+                    identifiersCLJ.add(line.split()[1][0:5])
+                    # print(line.split()[0])
+                    # print(line.split()[1][0:5])
+
+
+
+
+
+
+
 
     # Mostly works: Add TOK_Identifiers and remove comments + remove Some
     elif (programSuffix == ".ml"):
@@ -96,8 +127,9 @@ def createKeywordList(programName, summaryFile):
         identifiersList.sort()
         writeList(identifiersList, summaryFile)
     elif (programSuffix == "clj"):
-        identifiers.sort()
-        writeList(identifiers, summaryFile)
+        identifiersList = list(identifiersCLJ)
+        identifiersList.sort()
+        writeList(identifiersList, summaryFile)
     elif (programSuffix == ".lp"):
         identifiersList = list(identifersLP)
         identifiersList.sort()
@@ -171,6 +203,6 @@ index = open("index.html", "w")
 createHTML(index)
 
 # Email to Dan and Daisy
-email = input("Who would you like to send the tar file to: ")
-os.system("cd ..; tar czf csc344.tar.gz csc344 ")
-os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
+# email = input("Who would you like to send the tar file to: ")
+# os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+# os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
