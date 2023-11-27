@@ -2,6 +2,22 @@
 import os
 import re
 
+def createHTML(index):
+    index.write("<!DOCTYPE html>\n"
+                "<html lang=\"en\">\n"
+                "<head>\n"
+                "<title> Summary of CSC344 Fall 2023 </title>\n"
+                "</head>\n\n")
+
+    index.write("<h2> All of the programming challenges: </h2>\n"
+                "<ol>\n"
+                "<li> C Program: </li>" + "<a href=./a1/summary_a1.html> TuringMachine.c </a>\n" 
+                "<li> Clojure Program: </li>" + "<a href=./a2/summary_a2.html> InferenceSys.clj</a>\n"
+                "<li> OCaml Program: </li>" + "<a href=./a3/summary_a3.html> PatternMatching.ml</a>\n"
+                "<li> ASP Program: </li>" + "<a href=./a4/summary_a4.html> DistancingSim.lp</a>\n"
+                "<li> Python Program: </li>" + "<a href=./a5/summary_a5.html> SummaryOfCSC344.py</a>\n")
+
+
 def writeList(identifiers, summaryFile):
     summaryFile.write("<p> Here are the ordered list of identifiers: </p>")
     summaryFile.write("<ol> \n")
@@ -74,7 +90,6 @@ def createKeywordList(programName, summaryFile):
                     identifersPY.add(line.split()[3])
 
 
-
     if (programSuffix == ".ml"):
         # identifiers.sort()
         identifiersList = list(identifiers)
@@ -126,13 +141,13 @@ os.chdir(fileDirectory)
 for file in os.listdir(fileDirectory):
     os.chdir(fileDirectory)
     # Ignore Hidden Files
-    if (os.fsdecode(file)[0] == '.'):
+    if (os.fsdecode(file)[0] == "." or os.fsdecode(file) == "index.html"):
         continue
     else:
         fileName = os.fsdecode(file)
         print(os.path.join(fileDirectory, fileName))
     # Find the code text in each file and create an HTML file
-    for program in os.listdir(fileName):
+    for program in os.listdir(fileName): # triees to access index.html as a directory in the csc344 folder
         programName = os.fsdecode(program)
         if (programName[0] == "s" or programName[0] == "."):
             continue
@@ -151,20 +166,11 @@ for file in os.listdir(fileDirectory):
             # Close the file
             summaryFile.close()
 
-            # variable = os.system("grep -o -i for " + programName + " | wc -l")
-            # print(str(variable))
-            # summaryFile.write(str(os.system("grep -o -i for " + programName + " | wc -l")))
-
-#
-
-
-# how to grab keywords
-# grep -o -i KEYWORD NAMEOFFILE | wc -l
-
-# def createHTML():
-#     f = open()
-'''
 os.chdir(fileDirectory)
-f = open("index.html")
-'''
-# numOfLines = os.system("grep -o -i for " + programName + " | wc -l")
+index = open("index.html", "w")
+createHTML(index)
+
+# Email to Dan and Daisy
+email = input("Who would you like to send the tar file to: ")
+os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
