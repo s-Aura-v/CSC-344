@@ -44,8 +44,9 @@ def createKeywordList(programName, summaryFile):
                     identifiersCLJ.add(line.split()[1][1:])
                 if "[" in line:
                     if line.split()[0][0] == "[":
-                        # print(line.split()[0][1: len(line.split()[0]) - 1])
-                        if len(line.split()) < 1:
+                        print("this is 1: " + line.split()[0][1: len(line.split()[0]) - 1])
+                        if len(line.split()) == 1:
+                            print("this is 2: " + line.split()[0][1: len(line.split()[0]) - 1])
                             identifiersCLJ.add(line.split()[0][1: len(line.split()[0]) - 1])
                         if len(line.split()) > 1:
                             identifiersCLJ.add(line.split()[0][1:])
