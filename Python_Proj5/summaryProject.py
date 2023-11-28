@@ -30,39 +30,38 @@ def createKeywordList(programName, summaryFile):
     # Clojure
     programFile = open(programName, "r")
     programSuffix = programName[-3:];
+    identifiers = set()
     if (programSuffix == "clj"):
-        identifiersCLJ = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
                 if ";;" in line:
                     continue
                 if "defn" in line:
-                    identifiersCLJ.add(line.split()[1])
+                    identifiers.add(line.split()[1])
                 if "let" in line or "for" in line:
-                    identifiersCLJ.add(line.split()[1][1:])
+                    identifiers.add(line.split()[1][1:])
                 if "[" in line:
                     if line.split()[0][0] == "[":
                         if len(line.split()) == 1:
-                            identifiersCLJ.add(line.split()[0][1: len(line.split()[0]) - 1])
+                            identifiers.add(line.split()[0][1: len(line.split()[0]) - 1])
                         if len(line.split()) > 1:
-                            identifiersCLJ.add(line.split()[0][1:])
-                            identifiersCLJ.add(line.split()[1][0: line.split()[1].index("]")])
+                            identifiers.add(line.split()[0][1:])
+                            identifiers.add(line.split()[1][0: line.split()[1].index("]")])
                 if ("[" in line and "]" not in line):
-                    identifiersCLJ.add(line.split()[1][1:])
-                    identifiersCLJ.add(line.split()[2][2:6])
+                    identifiers.add(line.split()[1][1:])
+                    identifiers.add(line.split()[2][2:6])
                     # print(line.split()[1][1:])
                     # print(line.split()[2][2:6])
                 if ("]" in line and "[" not in line):
-                    identifiersCLJ.add(line.split()[0])
-                    identifiersCLJ.add(line.split()[1][0:5])
+                    identifiers.add(line.split()[0])
+                    identifiers.add(line.split()[1][0:5])
                     # print(line.split()[0])
                     # print(line.split()[1][0:5])
 
 
-    # Mostly works: Add TOK_Identifiers and remove comments + remove Some: incomplete
+    # Mostly works: Remove =
     elif (programSuffix == ".ml"):
-        identifiers = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
@@ -73,44 +72,62 @@ def createKeywordList(programName, summaryFile):
                     comment = False
                 if comment:
                     continue
-
-                if "=" in line:
+                if "=" in line.split():
                     if "rec" in line:
-                        # print(line.split()[2])
-                        identifiers.add(line.split()[2])
+                        if "()" in line.split():
+                            for item in line.split()[2:line.split().index("()")]:
+                                identifiers.add(item)
+                        else:
+                            for item in line.split()[2:line.split().index("=")]:
+                                identifiers.add(item)
+                if "let" in line.split():
+                    if "rec" in line:
+                        if "()" in line.split():
+                            for item in line.split()[2:line.split().index("()")]:
+                                identifiers.add(item)
+                        else:
+                            for item in line.split()[2:line.split().index("=")]:
+                                identifiers.add(item)
                     else:
-                        # print(line.split()[1])
+                        if "()" in line.split():
+                            for item in line.split()[1:line.split().index("()")]:
+                                print(line.split()[1:line.split().index("()")])
+                                identifiers.add(item)
+                        else:
+                            for item in line.split()[1:line.split().index("=")]:
+                                # print(item)
+                                if "=" not in item:
+                                    identifiers.add(item)
+                                    print(item)
                         identifiers.add(line.split()[1])
-
                 # Grab the alphabet
-                # if "|" in line:
-                #     if "|" in line.split():
-                #         print("hi")
-                        # print(line)
-                        # print(line.split()[line.split().index("|") + 1])
+                if "|" in line.split():
+                    if "(h::t)" in line.split():
+                        identifiers.add(line.split()[1][1])
+                        identifiers.add(line.split()[1][4])
+                    else:
+                        identifiers.add(line.split()[line.split().index("|") + 1])
 
     # ASP - Complete
     elif (programSuffix == ".lp"):
-        identifersLP = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
                 if "%" in line:
                     continue
-                pattern = r'^\w+\(.+,.+\).+$'  # Regular expression pattern
+                # Find pattern text(text,text)text
+                pattern = r'^\w+\(.+,.+\).+$'
                 if re.match(pattern, line):
                     var = line[0: (line.index("("))]
                     # print(var)
-                    identifersLP.add(var)
+                    identifiers.add(var)
                 if "=" in line.split():
-                    identifersLP.add(line.split()[line.split().index("=") - 1])
+                    identifiers.add(line.split()[line.split().index("=") - 1])
                 if "{" in line:
-                    identifersLP.add(line.split()[0][1:(line.index("("))])
-
+                    identifiers.add(line.split()[0][1:(line.index("("))])
 
     # C
     elif (programSuffix[-2:] == ".c"):
-        identifiersC = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
@@ -118,45 +135,27 @@ def createKeywordList(programName, summaryFile):
                     lineList = line.split()
                     if ("=" in lineList):
                         equalIndex = lineList.index("=")
-                        identifiersC.add(line.split()[equalIndex - 1])
+                        identifiers.add(line.split()[equalIndex - 1])
+
     # Python
     elif (programSuffix == ".py"):
-        identifersPY = set()
         with programFile as file:
             for line in file:
                 if "def" in line:
-                    identifersPY.add(line.split()[1])
+                    identifiers.add(line.split()[1])
                 if "=" in line:
                     lineList = line.split()
                     if ("=" in lineList):
                         equalIndex = lineList.index("=")
-                        identifersPY.add(line.split()[equalIndex - 1])
+                        identifiers.add(line.split()[equalIndex - 1])
                 if "with" in line:
-                    identifersPY.add(line.split()[1])
-                    identifersPY.add(line.split()[3])
+                    identifiers.add(line.split()[1])
+                    identifiers.add(line.split()[3])
 
-
-    if (programSuffix == ".ml"):
-        # identifiers.sort()
-        identifiersList = list(identifiers)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix == "clj"):
-        identifiersList = list(identifiersCLJ)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix == ".lp"):
-        identifiersList = list(identifersLP)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix[-2:] == ".c"):
-        identifiersList = list(identifiersC)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix == ".py"):
-        identifersList = list(identifersPY)
-        identifersList.sort()
-        writeList(identifersList, summaryFile)
+    identifiersList = list(identifiers)
+    identifiersList.sort()
+    writeList(identifiersList, summaryFile)
+    identifiersList.clear()
 
 
 def boilerplate(summaryFile, programName):
