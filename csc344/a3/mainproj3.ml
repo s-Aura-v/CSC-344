@@ -168,11 +168,11 @@ let match_pattern pattern input =
   | _ -> print_endlines "no match"
 ;;
 
-let pattern = "I (like|love|hate)( (cat|dog))? people"
-let string = "2"
+(* let pattern = "I (like|love|hate)( (cat|dog))? people"
+(* let string = "2" *)
 
 let pattern = parse pattern
-let is_match = match_pattern pattern string
+let is_match = match_pattern pattern string *)
 
 
 

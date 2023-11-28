@@ -34,19 +34,16 @@ def createKeywordList(programName, summaryFile):
         identifiersCLJ = set()
         with programFile as file:
             for line in file:
-                print(line, end="")
+                # print(line, end="")
                 if ";;" in line:
                     continue
                 if "defn" in line:
                     identifiersCLJ.add(line.split()[1])
                 if "let" in line or "for" in line:
-                    print(line.split()[1][1:])
                     identifiersCLJ.add(line.split()[1][1:])
                 if "[" in line:
                     if line.split()[0][0] == "[":
-                        print("this is 1: " + line.split()[0][1: len(line.split()[0]) - 1])
                         if len(line.split()) == 1:
-                            print("this is 2: " + line.split()[0][1: len(line.split()[0]) - 1])
                             identifiersCLJ.add(line.split()[0][1: len(line.split()[0]) - 1])
                         if len(line.split()) > 1:
                             identifiersCLJ.add(line.split()[0][1:])
@@ -63,18 +60,20 @@ def createKeywordList(programName, summaryFile):
                     # print(line.split()[1][0:5])
 
 
-
-
-
-
-
-
-    # Mostly works: Add TOK_Identifiers and remove comments + remove Some
+    # Mostly works: Add TOK_Identifiers and remove comments + remove Some: incomplete
     elif (programSuffix == ".ml"):
         identifiers = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
+                # ignore comments
+                if "(*" in line:
+                    comment = True
+                if "*)" in line:
+                    comment = False
+                if comment:
+                    continue
+
                 if "=" in line:
                     if "rec" in line:
                         # print(line.split()[2])
@@ -82,18 +81,33 @@ def createKeywordList(programName, summaryFile):
                     else:
                         # print(line.split()[1])
                         identifiers.add(line.split()[1])
-    # ASP
+
+                # Grab the alphabet
+                # if "|" in line:
+                #     if "|" in line.split():
+                #         print("hi")
+                        # print(line)
+                        # print(line.split()[line.split().index("|") + 1])
+
+    # ASP - Complete
     elif (programSuffix == ".lp"):
         identifersLP = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
+                if "%" in line:
+                    continue
                 pattern = r'^\w+\(.+,.+\).+$'  # Regular expression pattern
                 if re.match(pattern, line):
                     var = line[0: (line.index("("))]
+                    # print(var)
                     identifersLP.add(var)
-                if "=" in line:
-                    identifersLP.add(line.split()[1])
+                if "=" in line.split():
+                    identifersLP.add(line.split()[line.split().index("=") - 1])
+                if "{" in line:
+                    identifersLP.add(line.split()[0][1:(line.index("("))])
+
+
     # C
     elif (programSuffix[-2:] == ".c"):
         identifiersC = set()
