@@ -31,6 +31,7 @@ def createKeywordList(programName, summaryFile):
     programFile = open(programName, "r")
     programSuffix = programName[-3:];
     identifiers = set()
+    foundKeyWord = False
     if (programSuffix == "clj"):
         with programFile as file:
             for line in file:
@@ -126,22 +127,44 @@ def createKeywordList(programName, summaryFile):
             for line in file:
                 # print(line, end="")
                 if "//" in line:
-                    if "global" in line:
+                    if "Global" in line:
                         pass
                     else:
                         continue
                 if "=" in line.split():
                     equalIndex = line.split().index("=")
-                    if "*" not in line and "->" not in line and "." not in line:
-                        identifiers.add(line.split()[equalIndex - 1])
+                    if "*" not in line and "." not in line:
+                        for item in line.split():
+                            if "-" in item and ">" in item:
+                                if ";" in item:
+                                    # print((item[item.index(">") + 1: item.index(";")]))
+                                    identifiers.add(item[item.index(">") + 1: item.index(";")])
+                                else:
+                                    # print((item[item.index(">") + 1:]))
+                                    identifiers.add(item[item.index(">") + 1:])
+                            elif "-" not in item and ">" not in item:
+                                print((item))
+                                identifiers.add(line.split()[equalIndex - 1])
                         # print(line.split()[equalIndex - 1])
                 if "void" in line.split():
                     identifiers.add(line.split()[1][0:line.split()[1].index("(")])
-                # if "global" in line:
-                #     functions = True;
-                # if functions:
-                #     if "struct" in line:
-                #         print(line.split().index()[2])
+                if "//Global" in line:
+                    foundKeyWord = True
+                if "main" in line:
+                    foundKeyWord = False
+                if foundKeyWord:
+                    if len(line.split()) == 0:
+                        pass
+                    elif "struct" in line:
+                        if ";" in line.split()[2]:
+                            identifiers.add(line.split()[2][0: line.split()[2].index(";")])
+                        elif "(" in line.split()[2]:
+                            identifiers.add(line.split()[2][0: line.split()[2].index("(")])
+                    else:
+                        if "(" in line.split()[1]:
+                            identifiers.add(line.split()[1][0: line.split()[1].index("(")])
+                        else:
+                            identifiers.add(line.split()[1])
 
 
     # Python - complete
@@ -169,6 +192,7 @@ def createKeywordList(programName, summaryFile):
                     else:
                         identifiers.add(line.split()[1])
                         identifiers.add(line.split()[3])
+
     identifiersList = list(identifiers)
     identifiersList.sort()
     writeList(identifiersList, summaryFile)
@@ -234,6 +258,6 @@ index = open("index.html", "w")
 createHTML(index)
 
 # Email to Dan and Daisy
-email = input("Who would you like to send the tar file to: ")
-os.system("cd ..; tar czf csc344.tar.gz csc344 ")
-os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
+# email = input("Who would you like to send the tar file to: ")
+# os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+# os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
