@@ -88,7 +88,7 @@ def createKeywordList(programName, summaryFile):
                         if "()" in line.split():
                             for item in line.split()[1:line.split().index("()")]:
                                 # print(line.split()[1:line.split().index("()")])
-                                if item is not "=":
+                                if item != "=":
                                     identifiers.add(item)
                         else:
                             for item in line.split()[1:line.split().index("=")]:
@@ -223,9 +223,9 @@ def summarize(summaryFile, programName, currentDirectory):
     createKeywordList(programName, summaryFile)
 
 # Set Directory
-# /Users/survive/Desktop/EEATO/23Fall/CSC 344/csc344
-# fileDirectory = input("Enter the file directory: ")
-fileDirectory = "/Users/survive/Desktop/EEATO/23Fall/CSC344/csc344"
+# /home/slamich2/CSC344/python_Proj2/csc344
+fileDirectory = input("Enter the file directory: ")
+# fileDirectory = "/Users/survive/Desktop/EEATO/23Fall/CSC344/csc344"
 os.chdir(fileDirectory)
 # Go through each directory and print the amount of lines
 
@@ -263,6 +263,6 @@ index = open("index.html", "w")
 createHTML(index)
 
 # Email to Dan and Daisy
-# email = input("Who would you like to send the tar file to: ")
-# os.system("cd ..; tar czf csc344.tar.gz csc344 ")
-# os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
+email = input("Who would you like to send the tar file to: ")
+os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
