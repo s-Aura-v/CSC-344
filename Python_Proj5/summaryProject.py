@@ -121,7 +121,7 @@ def createKeywordList(programName, summaryFile):
                 if "{" in line:
                     identifiers.add(line.split()[0][1:(line.index("("))])
 
-    # C
+    # C - Completes
     elif (programSuffix[-2:] == ".c"):
         with programFile as file:
             for line in file:
@@ -133,19 +133,23 @@ def createKeywordList(programName, summaryFile):
                         continue
                 if "=" in line.split():
                     equalIndex = line.split().index("=")
-                    if "*" not in line and "." not in line:
+                    if "*" not in line and "->" not in line and "." not in line:
+                        identifiers.add(line.split()[equalIndex - 1])
+                        # print(line.split()[equalIndex - 1])
+                    elif "->" in line:
                         for item in line.split():
-                            if "-" in item and ">" in item:
+                            if "->" in item:
+                                # print (item)
                                 if ";" in item:
-                                    # print((item[item.index(">") + 1: item.index(";")]))
-                                    identifiers.add(item[item.index(">") + 1: item.index(";")])
+                                    if "]" in item:
+                                        pass
+                                    else:
+                                        # print((item[item.index(">") + 1: item.index(";")]))
+                                        identifiers.add(item[item.index(">") + 1: item.index(";")])
                                 else:
                                     # print((item[item.index(">") + 1:]))
                                     identifiers.add(item[item.index(">") + 1:])
-                            elif "-" not in item and ">" not in item:
-                                print((item))
-                                identifiers.add(line.split()[equalIndex - 1])
-                        # print(line.split()[equalIndex - 1])
+
                 if "void" in line.split():
                     identifiers.add(line.split()[1][0:line.split()[1].index("(")])
                 if "//Global" in line:
