@@ -2,6 +2,22 @@
 import os
 import re
 
+def createHTML(index):
+    index.write("<!DOCTYPE html>\n"
+                "<html lang=\"en\">\n"
+                "<head>\n"
+                "<title> Summary of CSC344 Fall 2023 </title>\n"
+                "</head>\n\n")
+
+    index.write("<h2> All of the programming challenges: </h2>\n"
+                "<ol>\n"
+                "<li> C Program: </li>" + "<a href=./a1/summary_a1.html> TuringMachine.c </a>\n" 
+                "<li> Clojure Program: </li>" + "<a href=./a2/summary_a2.html> InferenceSys.clj</a>\n"
+                "<li> OCaml Program: </li>" + "<a href=./a3/summary_a3.html> PatternMatching.ml</a>\n"
+                "<li> ASP Program: </li>" + "<a href=./a4/summary_a4.html> DistancingSim.lp</a>\n"
+                "<li> Python Program: </li>" + "<a href=./a5/summary_a5.html> SummaryOfCSC344.py</a>\n")
+
+
 def writeList(identifiers, summaryFile):
     summaryFile.write("<p> Here are the ordered list of identifiers: </p>")
     summaryFile.write("<ol> \n")
@@ -14,82 +30,152 @@ def createKeywordList(programName, summaryFile):
     # Clojure
     programFile = open(programName, "r")
     programSuffix = programName[-3:];
+    identifiers = set()
     if (programSuffix == "clj"):
-        identifiers = []
         with programFile as file:
             for line in file:
+                if ";;" in line:
+                    continue
                 if "defn" in line:
-                    identifiers.append(line.split()[1])
+                    identifiers.add(line.split()[1])
+                if "let" in line or "for" in line:
+                    identifiers.add(line.split()[1][1:])
+                if "[" in line:
+                    if line.split()[0][0] == "[":
+                        if len(line.split()) == 1:
+                            identifiers.add(line.split()[0][1: len(line.split()[0]) - 1])
+                        if len(line.split()) > 1:
+                            identifiers.add(line.split()[0][1:])
+                            identifiers.add(line.split()[1][0: line.split()[1].index("]")])
+                if ("[" in line and "]" not in line):
+                    identifiers.add(line.split()[1][1:])
+                    identifiers.add(line.split()[2][2:6])
+                if ("]" in line and "[" not in line):
+                    identifiers.add(line.split()[0])
+                    identifiers.add(line.split()[1][0:5])
 
-    # Mostly works: Add TOK_Identifiers and remove comments + remove Some
+
+    # Mostly works: Remove =
     elif (programSuffix == ".ml"):
-        identifiers = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
-                if "=" in line:
+                # ignore comments
+                if "(*" in line:
+                    comment = True
+                if "*)" in line:
+                    comment = False
+                if comment:
+                    continue
+                if "=" in line.split():
                     if "rec" in line:
-                        # print(line.split()[2])
-                        identifiers.add(line.split()[2])
+                        if "()" in line.split():
+                            for item in line.split()[2:line.split().index("()")]:
+                                identifiers.add(item)
+                        else:
+                            for item in line.split()[2:line.split().index("=")]:
+                                identifiers.add(item)
+                if "let" in line.split():
+                    if "rec" in line:
+                        if "()" in line.split():
+                            for item in line.split()[2:line.split().index("()")]:
+                                identifiers.add(item)
+                        else:
+                            for item in line.split()[2:line.split().index("=")]:
+                                identifiers.add(item)
                     else:
-                        # print(line.split()[1])
+                        if "()" in line.split():
+                            for item in line.split()[1:line.split().index("()")]:
+                                # print(line.split()[1:line.split().index("()")])
+                                identifiers.add(item)
+                        else:
+                            for item in line.split()[1:line.split().index("=")]:
+                                # print(item)
+                                if "=" not in item:
+                                    identifiers.add(item)
                         identifiers.add(line.split()[1])
-    # ASP
+                # Grab the alphabet
+                if "|" in line.split():
+                    if "(h::t)" in line.split():
+                        identifiers.add(line.split()[1][1])
+                        identifiers.add(line.split()[1][4])
+                    else:
+                        identifiers.add(line.split()[line.split().index("|") + 1])
+
+    # ASP - Complete
     elif (programSuffix == ".lp"):
-        identifersLP = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
-                pattern = r'^\w+\(.+,.+\).+$'  # Regular expression pattern
+                if "%" in line:
+                    continue
+                # Find pattern text(text,text)text
+                pattern = r'^\w+\(.+,.+\).+$'
                 if re.match(pattern, line):
                     var = line[0: (line.index("("))]
-                    print(var)
-                    identifersLP.add(var)
-                if "=" in line:
-                    identifersLP.add(line.split()[1])
+                    # print(var)
+                    identifiers.add(var)
+                if "=" in line.split():
+                    identifiers.add(line.split()[line.split().index("=") - 1])
+                if "{" in line:
+                    identifiers.add(line.split()[0][1:(line.index("("))])
+
     # C
     elif (programSuffix[-2:] == ".c"):
-        identifiersC = set()
         with programFile as file:
             for line in file:
                 # print(line, end="")
-                if "=" in line:
-                    var = line.split()
-                    if ("=" in var):
-                        var2 = var.index("=")
-                        identifiersC.add(line.split()[var2 - 1])
+                if "//" in line:
+                    if "global" in line:
+                        pass
+                    else:
+                        continue
+                if "=" in line.split():
+                    equalIndex = line.split().index("=")
+                    if "*" not in line and "->" not in line and "." not in line:
+                        identifiers.add(line.split()[equalIndex - 1])
+                        # print(line.split()[equalIndex - 1])
+                if "void" in line.split():
+                    identifiers.add(line.split()[1][0:line.split()[1].index("(")])
+                # if "global" in line:
+                #     functions = True;
+                # if functions:
+                #     if "struct" in line:
+                #         print(line.split().index()[2])
+
+
     # Python
     elif (programSuffix == ".py"):
-        identifersPY = set()
         with programFile as file:
             for line in file:
-                if "def" in line:
-                    print(line, end="")
-                    print(line.split()[1])
-                    identifersPY.append(line.split()[1])
+                if "#" in line:
+                    continue
+                if "def" in line.split():
+                    if "(" in line:
+                        identifiers.add(line.split()[1][0: line.split()[1].index("(")])
+                    else:
+                        identifiers.add(line.split()[1])
+                if "=" in line:
+                    lineList = line.split()
+                    if ("=" in lineList):
+                        equalIndex = lineList.index("=")
+                        identifiers.add(line.split()[equalIndex - 1])
+                if "with" in line.split() or "for" in line.split():
+                    if "." in line:
+                        continue
+                    elif ":" in line:
+                        identifiers.add(line.split()[1])
+                        identifiers.add(line.split()[3][0: line.split()[3].index(":")])
+                    else:
+                        identifiers.add(line.split()[1])
+                        identifiers.add(line.split()[3])
 
 
 
-    if (programSuffix == ".ml"):
-        # identifiers.sort()
-        identifiersList = list(identifiers)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix == "clj"):
-        identifiers.sort()
-        writeList(identifiers, summaryFile)
-    elif (programSuffix == ".lp"):
-        identifiersList = list(identifersLP)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix[-2:] == ".c"):
-        identifiersList = list(identifiersC)
-        identifiersList.sort()
-        writeList(identifiersList, summaryFile)
-    elif (programSuffix == ".py"):
-        identifersList = list(identifersPY)
-        identifersList.sort()
-        writeList(identifersList, summaryFile)
+    identifiersList = list(identifiers)
+    identifiersList.sort()
+    writeList(identifiersList, summaryFile)
+    identifiersList.clear()
 
 
 def boilerplate(summaryFile, programName):
@@ -121,13 +207,13 @@ os.chdir(fileDirectory)
 for file in os.listdir(fileDirectory):
     os.chdir(fileDirectory)
     # Ignore Hidden Files
-    if (os.fsdecode(file)[0] == '.'):
+    if (os.fsdecode(file)[0] == "." or os.fsdecode(file) == "index.html"):
         continue
     else:
         fileName = os.fsdecode(file)
         print(os.path.join(fileDirectory, fileName))
     # Find the code text in each file and create an HTML file
-    for program in os.listdir(fileName):
+    for program in os.listdir(fileName): # triees to access index.html as a directory in the csc344 folder
         programName = os.fsdecode(program)
         if (programName[0] == "s" or programName[0] == "."):
             continue
@@ -146,20 +232,11 @@ for file in os.listdir(fileDirectory):
             # Close the file
             summaryFile.close()
 
-            # variable = os.system("grep -o -i for " + programName + " | wc -l")
-            # print(str(variable))
-            # summaryFile.write(str(os.system("grep -o -i for " + programName + " | wc -l")))
-
-#
-
-
-# how to grab keywords
-# grep -o -i KEYWORD NAMEOFFILE | wc -l
-
-# def createHTML():
-#     f = open()
-'''
 os.chdir(fileDirectory)
-f = open("index.html")
-'''
-# numOfLines = os.system("grep -o -i for " + programName + " | wc -l")
+index = open("index.html", "w")
+createHTML(index)
+
+# Email to Dan and Daisy
+email = input("Who would you like to send the tar file to: ")
+os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")

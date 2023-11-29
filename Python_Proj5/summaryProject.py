@@ -34,7 +34,6 @@ def createKeywordList(programName, summaryFile):
     if (programSuffix == "clj"):
         with programFile as file:
             for line in file:
-                # print(line, end="")
                 if ";;" in line:
                     continue
                 if "defn" in line:
@@ -51,13 +50,9 @@ def createKeywordList(programName, summaryFile):
                 if ("[" in line and "]" not in line):
                     identifiers.add(line.split()[1][1:])
                     identifiers.add(line.split()[2][2:6])
-                    # print(line.split()[1][1:])
-                    # print(line.split()[2][2:6])
                 if ("]" in line and "[" not in line):
                     identifiers.add(line.split()[0])
                     identifiers.add(line.split()[1][0:5])
-                    # print(line.split()[0])
-                    # print(line.split()[1][0:5])
 
 
     # Mostly works: Remove =
@@ -91,14 +86,13 @@ def createKeywordList(programName, summaryFile):
                     else:
                         if "()" in line.split():
                             for item in line.split()[1:line.split().index("()")]:
-                                print(line.split()[1:line.split().index("()")])
+                                # print(line.split()[1:line.split().index("()")])
                                 identifiers.add(item)
                         else:
                             for item in line.split()[1:line.split().index("=")]:
                                 # print(item)
                                 if "=" not in item:
                                     identifiers.add(item)
-                                    print(item)
                         identifiers.add(line.split()[1])
                 # Grab the alphabet
                 if "|" in line.split():
@@ -131,27 +125,50 @@ def createKeywordList(programName, summaryFile):
         with programFile as file:
             for line in file:
                 # print(line, end="")
-                if "=" in line:
-                    lineList = line.split()
-                    if ("=" in lineList):
-                        equalIndex = lineList.index("=")
+                if "//" in line:
+                    if "global" in line:
+                        pass
+                    else:
+                        continue
+                if "=" in line.split():
+                    equalIndex = line.split().index("=")
+                    if "*" not in line and "->" not in line and "." not in line:
                         identifiers.add(line.split()[equalIndex - 1])
+                        # print(line.split()[equalIndex - 1])
+                if "void" in line.split():
+                    identifiers.add(line.split()[1][0:line.split()[1].index("(")])
+                # if "global" in line:
+                #     functions = True;
+                # if functions:
+                #     if "struct" in line:
+                #         print(line.split().index()[2])
 
-    # Python
+
+    # Python - complete
     elif (programSuffix == ".py"):
         with programFile as file:
             for line in file:
-                if "def" in line:
-                    identifiers.add(line.split()[1])
+                if "#" in line:
+                    continue
+                if "def" in line.split():
+                    if "(" in line:
+                        identifiers.add(line.split()[1][0: line.split()[1].index("(")])
+                    else:
+                        identifiers.add(line.split()[1])
                 if "=" in line:
                     lineList = line.split()
                     if ("=" in lineList):
                         equalIndex = lineList.index("=")
                         identifiers.add(line.split()[equalIndex - 1])
-                if "with" in line:
-                    identifiers.add(line.split()[1])
-                    identifiers.add(line.split()[3])
-
+                if "with" in line.split() or "for" in line.split():
+                    if "." in line:
+                        continue
+                    elif ":" in line:
+                        identifiers.add(line.split()[1])
+                        identifiers.add(line.split()[3][0: line.split()[3].index(":")])
+                    else:
+                        identifiers.add(line.split()[1])
+                        identifiers.add(line.split()[3])
     identifiersList = list(identifiers)
     identifiersList.sort()
     writeList(identifiersList, summaryFile)
@@ -217,6 +234,6 @@ index = open("index.html", "w")
 createHTML(index)
 
 # Email to Dan and Daisy
-# email = input("Who would you like to send the tar file to: ")
-# os.system("cd ..; tar czf csc344.tar.gz csc344 ")
-# os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
+email = input("Who would you like to send the tar file to: ")
+os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
