@@ -56,7 +56,7 @@ def createKeywordList(programName, summaryFile):
                     identifiers.add(line.split()[1][0:5])
 
 
-    # Mostly works: Remove =
+    # Complete - sorted not working properly
     elif (programSuffix == ".ml"):
         with programFile as file:
             for line in file:
@@ -88,7 +88,8 @@ def createKeywordList(programName, summaryFile):
                         if "()" in line.split():
                             for item in line.split()[1:line.split().index("()")]:
                                 # print(line.split()[1:line.split().index("()")])
-                                identifiers.add(item)
+                                if item is not "=":
+                                    identifiers.add(item)
                         else:
                             for item in line.split()[1:line.split().index("=")]:
                                 # print(item)
@@ -121,7 +122,7 @@ def createKeywordList(programName, summaryFile):
                 if "{" in line:
                     identifiers.add(line.split()[0][1:(line.index("("))])
 
-    # C - Completes
+    # C - Complete
     elif (programSuffix[-2:] == ".c"):
         with programFile as file:
             for line in file:
