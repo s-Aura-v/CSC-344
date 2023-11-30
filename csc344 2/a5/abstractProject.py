@@ -2,24 +2,20 @@
 import os
 import re
 
-
 def createHTML(index):
     index.write("<!DOCTYPE html>\n"
                 "<html lang=\"en\">\n"
                 "<head>\n"
-                "<link rel='stylesheet' href='mystyle.css'>"
                 "<title> Summary of CSC344 Fall 2023 </title>\n"
                 "</head>\n\n")
 
-    index.write("<body"
-                "<h2> All of the programming challenges: </h2>\n"
+    index.write("<h2> All of the programming challenges: </h2>\n"
                 "<ol>\n"
                 "<li> C Program: </li>" + "<a href=./a1/summary_a1.html> TuringMachine.c </a>\n" 
                 "<li> Clojure Program: </li>" + "<a href=./a2/summary_a2.html> InferenceSys.clj</a>\n"
                 "<li> OCaml Program: </li>" + "<a href=./a3/summary_a3.html> PatternMatching.ml</a>\n"
                 "<li> ASP Program: </li>" + "<a href=./a4/summary_a4.html> DistancingSim.lp</a>\n"
-                "<li> Python Program: </li>" + "<a href=./a5/summary_a5.html> SummaryOfCSC344.py</a>\n"
-                "</body")
+                "<li> Python Program: </li>" + "<a href=./a5/summary_a5.html> SummaryOfCSC344.py</a>\n")
 
 
 def writeList(identifiers, summaryFile):
@@ -35,7 +31,6 @@ def createKeywordList(programName, summaryFile):
     programFile = open(programName, "r")
     programSuffix = programName[-3:];
     identifiers = set()
-    foundKeyWord = False
     if (programSuffix == "clj"):
         with programFile as file:
             for line in file:
@@ -60,7 +55,7 @@ def createKeywordList(programName, summaryFile):
                     identifiers.add(line.split()[1][0:5])
 
 
-    # Complete - sorted not working properly
+    # Mostly works: Remove =
     elif (programSuffix == ".ml"):
         with programFile as file:
             for line in file:
@@ -92,8 +87,7 @@ def createKeywordList(programName, summaryFile):
                         if "()" in line.split():
                             for item in line.split()[1:line.split().index("()")]:
                                 # print(line.split()[1:line.split().index("()")])
-                                if item != "=":
-                                    identifiers.add(item)
+                                identifiers.add(item)
                         else:
                             for item in line.split()[1:line.split().index("=")]:
                                 # print(item)
@@ -126,13 +120,13 @@ def createKeywordList(programName, summaryFile):
                 if "{" in line:
                     identifiers.add(line.split()[0][1:(line.index("("))])
 
-    # C - Complete
+    # C
     elif (programSuffix[-2:] == ".c"):
         with programFile as file:
             for line in file:
                 # print(line, end="")
                 if "//" in line:
-                    if "Global" in line:
+                    if "global" in line:
                         pass
                     else:
                         continue
@@ -141,42 +135,16 @@ def createKeywordList(programName, summaryFile):
                     if "*" not in line and "->" not in line and "." not in line:
                         identifiers.add(line.split()[equalIndex - 1])
                         # print(line.split()[equalIndex - 1])
-                    elif "->" in line:
-                        for item in line.split():
-                            if "->" in item:
-                                # print (item)
-                                if ";" in item:
-                                    if "]" in item:
-                                        pass
-                                    else:
-                                        # print((item[item.index(">") + 1: item.index(";")]))
-                                        identifiers.add(item[item.index(">") + 1: item.index(";")])
-                                else:
-                                    # print((item[item.index(">") + 1:]))
-                                    identifiers.add(item[item.index(">") + 1:])
-
                 if "void" in line.split():
                     identifiers.add(line.split()[1][0:line.split()[1].index("(")])
-                if "//Global" in line:
-                    foundKeyWord = True
-                if "main" in line:
-                    foundKeyWord = False
-                if foundKeyWord:
-                    if len(line.split()) == 0:
-                        pass
-                    elif "struct" in line:
-                        if ";" in line.split()[2]:
-                            identifiers.add(line.split()[2][0: line.split()[2].index(";")])
-                        elif "(" in line.split()[2]:
-                            identifiers.add(line.split()[2][0: line.split()[2].index("(")])
-                    else:
-                        if "(" in line.split()[1]:
-                            identifiers.add(line.split()[1][0: line.split()[1].index("(")])
-                        else:
-                            identifiers.add(line.split()[1])
+                # if "global" in line:
+                #     functions = True;
+                # if functions:
+                #     if "struct" in line:
+                #         print(line.split().index()[2])
 
 
-    # Python - complete
+    # Python
     elif (programSuffix == ".py"):
         with programFile as file:
             for line in file:
@@ -201,6 +169,8 @@ def createKeywordList(programName, summaryFile):
                     else:
                         identifiers.add(line.split()[1])
                         identifiers.add(line.split()[3])
+
+
 
     identifiersList = list(identifiers)
     identifiersList.sort()
@@ -227,7 +197,7 @@ def summarize(summaryFile, programName, currentDirectory):
     createKeywordList(programName, summaryFile)
 
 # Set Directory
-# /home/slamich2/CSC344/python_Proj2/csc344
+# /Users/survive/Desktop/EEATO/23Fall/CSC 344/csc344
 # fileDirectory = input("Enter the file directory: ")
 fileDirectory = "/Users/survive/Desktop/EEATO/23Fall/CSC344/csc344"
 os.chdir(fileDirectory)
@@ -268,6 +238,5 @@ createHTML(index)
 
 # Email to Dan and Daisy
 email = input("Who would you like to send the tar file to: ")
-os.chdir('..')
-os.system("tar -czf csc344.tar.gz csc344")
-os.system("echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a './csc344.tar.gz'")
+os.system("cd ..; tar czf csc344.tar.gz csc344 ")
+os.system("cd ..; echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a ./csc344.tar.gz")
