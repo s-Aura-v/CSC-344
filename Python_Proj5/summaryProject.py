@@ -265,9 +265,10 @@ for file in os.listdir(fileDirectory):
 os.chdir(fileDirectory)
 index = open("index.html", "w")
 createHTML(index)
+index.close()
 
 # Email to Dan and Daisy
 email = input("Who would you like to send the tar file to: ")
 os.chdir('..')
 os.system("tar -czf csc344.tar.gz csc344")
-os.system("echo 'Final project for CSC344' | mutt -s 'Project 5: Python' " + email + " -a './csc344.tar.gz'")
+os.system("echo 'Final project for CSC344' | mutt -s 'Project 5: Python' '" + email + "' -a './csc344.tar.gz'")

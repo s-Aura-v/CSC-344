@@ -1,147 +1,223 @@
 (ns project2.core
-  (:require [clojure.string :as str])
-  (:gen-class))
+  (:gen-class)
+  ;(:use [set])
+  (:require [clojure.set :as set]))
 
-;;Not Elimination
-(defn not-elimination
-  "Eliminate double-nots from a function of nots"
-  [expr]
-  (if
-    (and (= 'not (first expr))
-         (list? (second expr)) (= 'not (first (second expr))))
-    ;; check if there are 2 nots
-    #{ (second (second expr)) }
-    ;; if not, check if there is not is present at all
-    (if (= 'not (first expr))
-      ;;return nothing if there is a not
-      #{}
-      ;;return the expression if there are no nots
-      #{ (first expr) })
-    ))
+;---=== PART ONE ===---
 
-;; Tests
-(not-elimination '(a))
-(not-elimination '(not a))
-(not-elimination '(not (not a)))
-(not-elimination '(not (not (and a b))))
-(not-elimination '(not (not (not (not c)))))
 
-;;and-elimination
-(defn and-elimination
-  "Return a vector of {a,b} if A and B"
-  [and-prop]
-  (if (= 'and (first and-prop))
-    #{ (second and-prop) (nth and-prop 2)}
-    "Not an and-statement"
-    ))
-
-;;Tests
-(and-elimination '(and a b))
-(and-elimination '(and (not (not (if a b))) a))
-
-;;modus ponens2 from (if X Y) and X, infer Y
-(defn modus-ponens2
-  "Infer x from if (X Y) and X"
-  [if-prop kb]
-  (if (not (symbol? if-prop))
-    ;;true
-    (if (= (second if-prop) (first kb))
-      #{(nth if-prop 2)}
-      #{(nth if-prop 1)}
+;not-elimination method
+(defn not-elimination [input]
+  (if (= (first input) 'not)
+    (let [sub-list (second input)]
+      (if (list? sub-list)
+        (if (= (first sub-list) 'not)
+          (set [(second sub-list)])
+          #{})
+        #{}
+        )
       )
-    ;;false
-    (if (= if-prop (second kb))
-      #{(nth kb 2)}
-      #{(nth kb 1)}
+    #{}
+    )
+  )
+
+
+;and-elimination method
+(defn and-elimination [proposition]
+  (if (and (= (first proposition) 'and) (>= (count proposition) 3))
+    (let [rest-prop (rest proposition)]
+      #{rest-prop}
+      )
+    )
+  )
+;modus-ponens method
+(defn modus-ponens1 [proposition kb]                        ;kb -> knowlegde base (what we know)
+  ;from (if X Y) and X, infer Y
+  ;Examples 1 and 3
+  ; (println (first (rest proposition)))
+  ;    (println kb)
+  (if (= (first proposition) 'if)
+    (if (= (second proposition) (first kb))
+      ;(println (last proposition))
+      (let [result (last proposition)]
+        ;(println result)
+        #{result}
+        )
       )
     )
   )
 
-;;Tests
-(modus-ponens2 '(if A B) '#{A})
-(modus-ponens2 '(if a b) '#{a})
-(modus-ponens2 '(if A B) '#{B})
-;;Backwards tests
-(modus-ponens2 'a '(if a b))
-(modus-ponens2 'b '(if b c))
 
-;;modus tollens: from (if X Y) and (not Y), infer (not X)
-(defn modus-tollens
-  "Evaluate (not A) from if (A B) and (not B)"
-  [if-prop kb]
-  (if (= (second if-prop) (second (first kb)))
-    (set [(list 'not (nth if-prop 2))])
-    (set [(list 'not (second if-prop))])
-    ))
-
-;;Tests
-(modus-tollens '(if A B) '#{(not A)})
-(modus-tollens '(if A B) '#{(not B)})
-
-;;Relevant-kb for modus-ponens2
-(defn relevant-kb [ant kb]
-  (for [prop kb :when (and (seq? prop) (= (second prop) ant))] prop))
-;;tests
-(relevant-kb 'b '#{(if a b) (if b c)})
-(relevant-kb 'a '#{(if a b) (if b c)})
-
-;Elim-step
-(defn elim-step1
-  "One step of the elimination inference procedure."
-  [prop kb]
-  ;;Not elimination
-  (if (not (symbol? prop)) ;;if prop is a not symbol
-    ;;if true
-    (if (and (list? prop) (= 'not (first prop)))
-      (clojure.set/union kb (not-elimination prop))
-      ;;and-elimination
-      (if (and (list? prop) (= 'and (first prop)))
-        (clojure.set/union kb (and-elimination prop))
-        ;;if X Y and X infer Y
-        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))
-          ;; if it has a not, do tollens
-          (clojure.set/union kb (modus-tollens prop kb))
-          ;;if not, do ponens
-          (clojure.set/union kb(modus-ponens2 prop kb))
+(defn modus-ponens2 [proposition kb]
+  ;from Y, infer (if X Y) and X
+  ;Example 2
+  (let [relevant-prop kb]
+    ;(println relevant-prop)
+    (let [relevant-kb proposition]
+      ;(println relevant-kb)
+      ;(println (first (first relevant-prop)))
+      (if (= (first (first relevant-prop)) 'if)
+        ;(println (second (first relevant-prop)))
+        (if (= (second (first relevant-prop)) relevant-kb)
+          ;(println (last (first relevant-prop)))
+          (let [result (last (first relevant-prop))]
+            ;(println result)
+            #{result}
+            )
           )
         )
       )
-    ;;if false
-    (clojure.set/union
-      (modus-ponens2 prop (first (relevant-kb prop kb)))
-      (modus-ponens2 'b (first (relevant-kb 'b kb)))
-      )
-      )
-    )
 
-;;Infer fwd
-(defn fwd-infer
-  "Make logical inferences based on propositions"
-  [prop known]
-  (loop [current-prop #{prop}
-         current-known known]
-    (if (empty? current-prop)
-      current-known
-      (let [new-known (elim-step1 (first current-prop) current-known)]
-        (recur (rest current-prop)
-               (if (not (empty? known))
-                 (clojure.set/union current-prop current-known new-known)
-                 (clojure.set/union (elim-step1 prop known)
-                                    (elim-step1 (second prop) '#{})
-                                    #{prop}
-                                    (elim-step1 (second (second (second prop))) #{(last prop)})
-                                    )
-                 )))))
+
+    )
   )
 
-(last '(and (not (not (if a b))) a))
+;modus-tollens method
+(defn modus-tollens [proposition kb]                        ;modus tollens: from (if X Y) and (not Y), infer (not X)
+  ;(println (first proposition))
+  ;(println (second (first kb)))
+  ;(println (second (rest proposition)))
+  ;(println (conj (list (second proposition)) 'not))
+  (if (= (first proposition) 'if)
+    (if (= (second (first kb)) (second (rest proposition)))
+      #{(conj (list (second proposition)) 'not)}
+      )
+    )
+  )
 
-;;Tests
-(fwd-infer '(if a b) '#{(not b)})
-;;#{(if a b) (not a) (not b)}
-(fwd-infer 'a '#{(if a b) (if b c)})
-;;{(if a b) a c (if b c) b}
-(fwd-infer '(and (not (not (if a b))) a) '#{})
-; #{(if a b) (not (not (if a b))) a (and (not (not (if a b))) a) b}
+
+;---=== Part 1 tests ===---
+(def a (modus-ponens2 'a '#{(if a b) (if b c)}))   ; --> #{b}
+(def b (modus-ponens1 '(if b c) '#{b}))     ; --> #{c}
+(def c (and-elimination '(and a b)))     ; --> #{(a b)}
+(def d (not-elimination '(not (not a))))   ; --> #{a}
+(modus-tollens '(if a b) '#{(not b)})   ;--> #{not a}
+
+
+;---=== PART TWO ===---
+
+
+(defn elim-step [proposition kb]
+  (let [new-stuff #{}]
+    (cond
+      (symbol? proposition)  ;'a '#{((if a b) (if b c))}
+
+      (if (= (first (second kb)) proposition)     ;'a '#{((if a b) (if b c))}
+        (= (first (first kb)) 'if)
+        (let [newly-known (first (first kb))]
+          (print "Because: ") (println (first (first kb)))
+          (let [newly-known (conj newly-known proposition)]
+            (print "And: ") (println proposition)
+            ;(println (first proposition))
+            ;(println (first kb))
+            ;(println (modus-ponens2 (first proposition) (first kb)))
+            (let [result (first (modus-ponens2 proposition (first kb)))]
+              (print "I derived: ") (println result)
+              (let [newly-known (conj newly-known result)]
+                (println "By modus ponens")
+                (print "=>") (println #{newly-known}) (println "")
+                (set/union (list new-stuff) (list newly-known))
+                newly-known
+                )
+              )
+            )
+          )
+        )
+
+      ;;modus tollens
+      (and (= (first proposition) 'if) (= (first (first kb)) 'not) (set? kb))  ;'(if a b) '#{(not b)}
+      (if (and (= (first proposition) 'if) (= (first (first kb)) 'not) (set? kb))
+        (let [newly-known (list proposition)]
+          (println "proposition")
+          (print "Because: ") (println proposition)
+          (let [newly-known (set/union newly-known kb)]
+            (print "And: ") (println (flatten (into () kb)))
+            (let [result (modus-tollens proposition kb)]
+              (print "I derived: ") (println (flatten (into () result)))
+              (let [newly-known (set/union newly-known result)]
+                (println "By modus tollens")
+                (print "=>") (println (into #{} newly-known)) (println "")
+                (into #{} (set/union (new-stuff newly-known)))
+                )
+              )
+            )
+          )
+        )
+
+      ;not elimination
+      (= (first proposition) 'not)
+      (let [newly-known (list proposition)]
+        (print "Because: ") (print proposition) (println "")
+        (let [result (first (not-elimination proposition))]
+          (print "I derived: ") (print result) (println "")
+          (println "By not-elimination")
+          (let [newly-known (set/union newly-known (list result))]
+            (print "=>") (println #{newly-known}) (println "")
+            (set/union new-stuff newly-known)
+            )
+          )
+        )
+      ;;and elimination
+      (= (first proposition) 'and)
+      (let [newly-known (list proposition)]
+        (print "Because: ") (print proposition) (println "")
+        (let [result (first (and-elimination proposition))]
+          (let [last-part (last result)]
+            (let [newly-known (conj newly-known last-part)]
+              (conj newly-known last-part)
+              (let [first-part (drop-last result)]
+                (let [newly-known (set/union newly-known first-part)]
+                  (set/union newly-known first-part)
+                  (print "I derived: ") (print first-part) (println "")
+                  (print "And: ") (print last-part) (println "")
+                  (println "By and-elimination")
+                  (print "=>") (println #{newly-known}) (println "")
+                  (set/union new-stuff newly-known)
+                  )
+                )
+              )
+            )
+          )
+        )
+      ;;modus-ponens
+      (= (first proposition) 'if)   ;'(if a b) '#{a}
+      (if (= (second proposition) (first kb))
+        (let [newly-known (list proposition)]
+          (print "Because: ") (println proposition)
+          (let [newly-known (conj newly-known (first kb))]
+            (print "And: ") (println (first kb))
+            (let [result (first (modus-ponens1 proposition kb))]
+              (print "I derived: ") (println result)
+              (let [newly-known (conj newly-known result)]
+                (println "By modus ponens")
+                (print "=>") (println #{newly-known}) (println "")
+                (set/union (list new-stuff) (list newly-known))
+                newly-known
+                )
+              )
+            )
+          )
+        )
+      )
+    )
+  )
+
+
+;---=== Part 2 tests ===---
+;(println "")(println "---=== Elim Step Tests ===---")(println "")
+;(println "Modus ponens 2")(println "")
+;(def f (elim-step 'a '#{((if a b) (if b c))}))             ; --> #{b}
+;(println "")(println "Modus ponens 1")(println "")
+;(def g (elim-step '(if b c) '#{b}))                        ; --> #{c}
+;(println "")(println "And Elimination")(println "")
+;(def h (elim-step '(and (not (not (if a b))) a) '#{}))     ; --> #{(a b)}
+;(println "")(println "Not Elimination")(println "")
+;(def i (elim-step '(not (not a)) '#{}))                    ; --> #{a}
+(println "")(println "Modus tollens")(println "")
+(elim-step '(if a b) '#{(not b)})                 ;--> #{not a}
+
+
+;---=== PART THREE ===---
+
 
 

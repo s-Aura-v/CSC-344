@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="a7dcf2a1-f4ad-4485-8bef-6fc5d4629246" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../Python_Proj5/summaryProject.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Python_Proj5/summaryProject.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../python_Proj5/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../python_Proj5/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeStyleSettingsInfer">
+    <option name="done" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectCodeStyleSettingsMigration">
+    <option name="version" value="2" />
+  </component>
+  <component name="ProjectId" id="2VrYCwmW55rxi4KX1UNrvyj0kqO" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/survive/Desktop/EEATO/23Fall/CSC 344/Clojure/project2&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
+  }
+}</component>
+  <component name="ReplState" timestamp="1697578953494">{:repl-history {:ide [], :local [{:command &quot;(modus-ponens '((if A B) and B))&quot;, :offset 32, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens '((if A B) and A))&quot;, :offset 32, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens '((if A B) and C))&quot;, :offset 32, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination (if-string))&quot;, :offset 29, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination '(if-string))&quot;, :offset 30, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination 'if-string)&quot;, :offset 28, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination if-string)&quot;, :offset 27, :ns &quot;project2.core&quot;} {:command &quot;(= (second (first if-string)) (nth if-string 2))&quot;, :offset 48, :ns &quot;project2.core&quot;} {:command &quot;(if  (= (second (first if-string)) (nth if-string 2))\n  \&quot;A\&quot;\n  \&quot;B\&quot;)&quot;, :offset 66, :ns &quot;project2.core&quot;} {:command &quot;(= (nth (first if-string) 2) (nth if-string 2))&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(if (= (nth (first if-string) 2) (nth if-string 2))\n  \&quot;A\&quot;\n  \&quot;B\&quot;)&quot;, :offset 64, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination (last if-string))&quot;, :offset 34, :ns &quot;project2.core&quot;} {:command &quot;(contains? 'not (last if-string))&quot;, :offset 33, :ns &quot;project2.core&quot;} {:command &quot;(contains? \&quot;not\&quot; (last if-string))&quot;, :offset 34, :ns &quot;project2.core&quot;} {:command &quot;(first (last if-string))&quot;, :offset 24, :ns &quot;project2.core&quot;} {:command &quot;(last if-string)&quot;, :offset 16, :ns &quot;project2.core&quot;} {:command &quot;(def if-string '((if A B) and (not B)))&quot;, :offset 39, :ns &quot;project2.core&quot;} {:command &quot;(nth (first if-string) 2)&quot;, :offset 25, :ns &quot;project2.core&quot;} {:command &quot;(second (last if-string))&quot;, :offset 25, :ns &quot;project2.core&quot;} {:command &quot;(defn modus-tollens\n  \&quot;Evaluate (not A) from if (A B) and (not B)\&quot;\n  [if-prop]\n  (if (= (second (first if-string)) ((second (last if-string))) )\n    \n    )\n\n  )&quot;, :offset 160, :ns &quot;project2.core&quot;} {:command &quot;second (first if-string)&quot;, :offset 24, :ns &quot;project2.core&quot;} {:command &quot;(second (first if-string))&quot;, :offset 26, :ns &quot;project2.core&quot;} {:command &quot;(modus-tollens if-string)&quot;, :offset 25, :ns &quot;project2.core&quot;} {:command &quot;(elim-step '(and (not (not (if a b))) a))&quot;, :offset 41, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop]\n  ;;Not elimination\n  (if (and (list? prop) (= 'not (first prop)))\n    (not-elimination 'prop)\n    ;;and-elimination\n    (if (and (list? prop) (= 'and (first prop)))\n      (and-elimination 'prop)\n      ;;if X Y and X infer Y\n      (if (and (list? prop) (= 'if (first prop)) ()) ;;not complete\n        (modus-ponens 'prop)\n        ;; if X Y and not X, infer X\n        (if (and (list? prop) (= 'if (first prop)) ()) ;;not complete\n          (modus-tollens 'prop)\n          )\n        )\n      )\n    )\n  )&quot;, :offset 578, :ns &quot;project2.core&quot;} {:command &quot;(elim-step '(and (not (not a b)) a))&quot;, :offset 36, :ns &quot;project2.core&quot;} {:command &quot;(def testF '(and (not (not if (a b))) a))&quot;, :offset 41, :ns &quot;project2.core&quot;} {:command &quot;(def testF '(and (not (not if (a b))) (not a)))&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(contains? 'not (last testF))&quot;, :offset 29, :ns &quot;project2.core&quot;} {:command &quot;(last testF)&quot;, :offset 12, :ns &quot;project2.core&quot;} {:command &quot;(list? (last testF))&quot;, :offset 20, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop]\n  ;;Not elimination\n  (if (and (list? prop) (= 'not (first prop)))\n    (not-elimination 'prop)\n    ;;and-elimination\n    (if (and (list? prop) (= 'and (first prop)))\n      (and-elimination 'prop)\n      ;;if X Y and X infer Y\n      (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ()) ;;not complete\n        (modus-ponens 'prop)\n        ;; if X Y and not X, infer X\n        (if (and (list? prop) (= 'if (first prop)) (list? (last prop)) ()) ;;not complete\n          (modus-tollens 'prop)\n          \&quot;None of them work\&quot;\n          )\n        )\n      )\n    )\n  )&quot;, :offset 648, :ns &quot;project2.core&quot;} {:command &quot;(defn modus-tollens\n  \&quot;Evaluate (not A) from if (A B) and (not B)\&quot;\n  [if-prop]\n  (if  (= (second (first if-prop)) (last (nth if-prop 2)))\n    (list 'not (nth (first if-string) 2))\n    ;;Remember to check if its even there\n    (list 'not (second (first if-prop)))\n    )\n  )&quot;, :offset 272, :ns &quot;project2.core&quot;} {:command &quot;\n(modus-tollens '((if A B) and (not A)))&quot;, :offset 40, :ns &quot;project2.core&quot;} {:command &quot;(modus-tollens '((if A B) and (not A)))&quot;, :offset 39, :ns &quot;project2.core&quot;} {:command &quot;(modus-tollens '((if A B) and (not B)))&quot;, :offset 39, :ns &quot;project2.core&quot;} {:command &quot;(def testF '(and (not (not if (a b)))  a))&quot;, :offset 42, :ns &quot;project2.core&quot;} {:command &quot;(elim-step '(not (not x)))&quot;, :offset 26, :ns &quot;project2.core&quot;} {:command &quot;(elim-step testF)&quot;, :offset 17, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination '(not (not (and a b))))&quot;, :offset 40, :ns &quot;project2.core&quot;} {:command &quot;(first '((and (not (not (if a b))) a)))&quot;, :offset 39, :ns &quot;project2.core&quot;} {:command &quot;(first (first '((and (not (not (if a b))) a))))&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(elim-step '(if A B) '#{(A)})&quot;, :offset 29, :ns &quot;project2.core&quot;} {:command &quot;(elim-step '(if A B) '#{(not A)})&quot;, :offset 33, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer '((and (not (not (if a b))) a)) '#{})&quot;, :offset 48, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step1\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop kb]\n  ;;Not elimination\n  (if (not (symbol? prop)) ;;if prop is a not symbol\n    ;;if true\n    (if (and (list? prop) (= 'not (first prop)))\n      (not-elimination prop)\n      ;;and-elimination\n      (if (and (list? prop) (= 'and (first prop)))\n        (and-elimination prop)\n        ;;if X Y and X infer Y\n        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))\n          ;; if it has a not, do tollens\n          (modus-tollens prop kb)\n          ;;if not, do ponens\n          (modus-ponens2 prop kb)\n          )\n        )\n      )\n    ;;if false\n    (modus-ponens2 prop (relevant-kb 'kb '#{(if a b) (if b c)}))\n    )\n  )&quot;, :offset 713, :ns &quot;project2.core&quot;} {:command &quot; (modus-ponens2 prop (relevant-kb 'prop 'kb))&quot;, :offset 45, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step1\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop kb]\n  ;;Not elimination\n  (if (not (symbol? prop)) ;;if prop is a not symbol\n    ;;if true\n    (if (and (list? prop) (= 'not (first prop)))\n      (not-elimination prop)\n      ;;and-elimination\n      (if (and (list? prop) (= 'and (first prop)))\n        (and-elimination prop)\n        ;;if X Y and X infer Y\n        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))\n          ;; if it has a not, do tollens\n          (modus-tollens prop kb)\n          ;;if not, do ponens\n          (modus-ponens2 prop kb)\n          )\n        )\n      )\n    ;;if false\n    (modus-ponens2 prop (relevant-kb prop 'kb))\n    )\n  )&quot;, :offset 696, :ns &quot;project2.core&quot;} {:command &quot;(relevant-kb 'b  '#{(if a b) (if b c)})&quot;, :offset 39, :ns &quot;project2.core&quot;} {:command &quot;(first (relevant-kb 'b '#{(if a b) (if b c)})\n       )&quot;, :offset 54, :ns &quot;project2.core&quot;} {:command &quot;(second (relevant-kb 'b '#{(if a b) (if b c)}))&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step1\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop kb]\n  ;;Not elimination\n  (if (not (symbol? prop)) ;;if prop is a not symbol\n    ;;if true\n    (if (and (list? prop) (= 'not (first prop)))\n      (not-elimination prop)\n      ;;and-elimination\n      (if (and (list? prop) (= 'and (first prop)))\n        (and-elimination prop)\n        ;;if X Y and X infer Y\n        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))\n          ;; if it has a not, do tollens\n          (modus-tollens prop kb)\n          ;;if not, do ponens\n          (modus-ponens2 prop kb)\n          )\n        )\n      )\n    ;;if false\n    (modus-ponens2 prop (first (relevant-kb prop 'kb)))\n    )\n  )&quot;, :offset 704, :ns &quot;project2.core&quot;} {:command &quot;(elim-step1 '(and (not (not (if a b))) a) '#{})\n&quot;, :offset 48, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step1\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop kb]\n  ;;Not elimination\n  (if (not (symbol? prop)) ;;if prop is a not symbol\n    ;;if true\n    (if (and (list? prop) (= 'not (first prop)))\n      (not-elimination prop)\n      ;;and-elimination\n      (if (and (list? prop) (= 'and (first prop)))\n        (and-elimination prop)\n        ;;if X Y and X infer Y\n        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))\n          ;; if it has a not, do tollens\n          (modus-tollens prop kb)\n          ;;if not, do ponens\n          (modus-ponens2 prop kb)\n          )\n        )\n      )\n    ;;if false\n    (modus-ponens2 prop #{(first (relevant-kb prop 'kb))})\n    )\n  )&quot;, :offset 707, :ns &quot;project2.core&quot;} {:command &quot;(first '#{(if a b) (if b c)})&quot;, :offset 29, :ns &quot;project2.core&quot;} {:command &quot;(second '#{(if a b) (if b c)})&quot;, :offset 30, :ns &quot;project2.core&quot;} {:command &quot;#{(first (relevant-kb 'b '#{(if a b) (if b c)}))}&quot;, :offset 49, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 'b #{(first (relevant-kb 'b '#{(if a b) (if b c)}))})&quot;, :offset 68, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 'b '#{(if b c)})&quot;, :offset 31, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 'b '(if b c))&quot;, :offset 28, :ns &quot;project2.core&quot;} {:command &quot;(first (relevant-kb 'b '#{(if a b) (if b c)}))&quot;, :offset 46, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 'b '(first (relevant-kb 'b '#{(if a b) (if b c)})))&quot;, :offset 66, :ns &quot;project2.core&quot;} {:command &quot;(defn elim-step1\n  \&quot;One step of the elimination inference procedure.\&quot;\n  [prop kb]\n  ;;Not elimination\n  (if (not (symbol? prop)) ;;if prop is a not symbol\n    ;;if true\n    (if (and (list? prop) (= 'not (first prop)))\n      (not-elimination prop)\n      ;;and-elimination\n      (if (and (list? prop) (= 'and (first prop)))\n        (and-elimination prop)\n        ;;if X Y and X infer Y\n        (if (and (list? prop) (= 'if (first prop)) (list? (first kb)))\n          ;; if it has a not, do tollens\n          (modus-tollens prop kb)\n          ;;if not, do ponens\n          (modus-ponens2 prop kb)\n          )\n        )\n      )\n    ;;if false\n    (modus-ponens2 prop (first (relevant-kb prop kb)))\n    )\n  )&quot;, :offset 703, :ns &quot;project2.core&quot;} {:command &quot;(relevant-kb 'b '#{(if a b) (if b c)})&quot;, :offset 38, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 'b (first (relevant-kb 'b '#{(if a b) (if b c)})))&quot;, :offset 65, :ns &quot;project2.core&quot;} {:command &quot;(defn fwd-infer\n  \&quot;Make logical inferences based on propositions\&quot;\n  [prop known]\n  (loop [current-prop #{prop}\n         current-known known]\n    (if (empty? current-prop)\n      known\n\n      (let [new-known (elim-step1 (first current-prop) known)]\n        (recur (rest current-prop) (clojure.set/union  known new-known)\n               )))))&quot;, :offset 339, :ns &quot;project2.core&quot;} {:command &quot;(elim-step1 'a '#{(if a b) (if b c)})&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(elim-step1 'b '#{(if a b) (if b c)})&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 '(if A B) '#{A})&quot;, :offset 31, :ns &quot;project2.core&quot;} {:command &quot;(modus-ponens2 '(if a b) '#{a})&quot;, :offset 31, :ns &quot;project2.core&quot;} {:command &quot;(into () '#{(if a b) (if b c)})&quot;, :offset 31, :ns &quot;project2.core&quot;} {:command &quot;(defn fwd-infer2\n  [prop known]\n  (loop [prop #{prop}\n         known known]\n    (if (empty? prop)\n      known\n      (recur (rest (into () prop))\n      ))\n      )\n  )&quot;, :offset 165, :ns &quot;project2.core&quot;} {:command &quot;(elim-step1 '(if a b) '#{a})&quot;, :offset 28, :ns &quot;project2.core&quot;} {:command &quot;(elim-step1 '(not (not (if a b))) '#{a})&quot;, :offset 40, :ns &quot;project2.core&quot;} {:command &quot;(elim-step1 '(and (not (not (if a b))) a) '#{})&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(defn fwd-infer2\n  [prop known]\n  (loop [prop #{prop}\n         known known]\n    (if (empty? prop)\n      known\n      (recur (rest (into () prop))\n      (clojure.set/union known (elim-step1 prop known))\n      ))\n      )\n  )&quot;, :offset 221, :ns &quot;project2.core&quot;} {:command &quot;(defn fwd-infer2\n  [prop known]\n  (loop [prop #{prop}\n         known known]\n    (if (empty? prop)\n      known\n      (recur (rest (into () prop))\n      (clojure.set/union known '(elim-step1 prop known))\n      ))\n      )\n  )&quot;, :offset 222, :ns &quot;project2.core&quot;} {:command &quot;(defn fwd-infer2\n  [prop known]\n  (loop [prop #{prop}\n         known known]\n    (if (empty? prop)\n      (elim-step1 prop known))\n      (recur (rest (into () prop))\n      (clojure.set/union known (elim-step1 prop known))\n      ))\n      )&quot;, :offset 236, :ns &quot;project2.core&quot;} {:command &quot;(into () {(if a b)})&quot;, :offset 20, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer2 '(and (not (not (if a b))) a) '#{})&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer2 '(and  (not (if a b)) a) '#{})&quot;, :offset 42, :ns &quot;project2.core&quot;} {:command &quot;(into () '#{(if a b)})&quot;, :offset 22, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer2 '(if a b) '#{(not b)})&quot;, :offset 34, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer2 'a '#{(if a b) (if b c)})&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer '(if a b) '#{(not b)})&quot;, :offset 33, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer 'a '#{(if a b) (if b c)})&quot;, :offset 36, :ns &quot;project2.core&quot;} {:command &quot;(nth '(and (not (not (if a b))) a) 5)&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(nth '(and (not (not (if a b))) a) 3)&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(nth '(and (not (not (if a b))) a) 1)&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(second '(and (not (not (if a b))) a))&quot;, :offset 38, :ns &quot;project2.core&quot;} {:command &quot;(second (second '(and (not (not (if a b))) a)))&quot;, :offset 47, :ns &quot;project2.core&quot;} {:command &quot;(second (second (second '(and (not (not (if a b))) a))))&quot;, :offset 56, :ns &quot;project2.core&quot;} {:command &quot;(nnext '(and (not (not (if a b))) a))&quot;, :offset 37, :ns &quot;project2.core&quot;} {:command &quot;(last '(and (not (not (if a b))) a))&quot;, :offset 36, :ns &quot;project2.core&quot;} {:command &quot;(fwd-infer '(and (not (not (if a b))) a) '#{})&quot;, :offset 46, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination '(a))&quot;, :offset 22, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination '(not a))&quot;, :offset 26, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination '(not (not a)))&quot;, :offset 32, :ns &quot;project2.core&quot;} {:command &quot;(not-elimination '(not (not (not (not c)))))&quot;, :offset 44, :ns &quot;project2.core&quot;} {:command &quot;clear-agent-errors&quot;, :offset 18, :ns &quot;project2.core&quot;}], :remote []}}</component>
+  <component name="RunManager">
+    <configuration default="true" type="Babashka" factoryName="BabashkaLocalRepl" activateToolWindowBeforeRun="false">
+      <setting name="displayName" value="" />
+      <setting name="bbPath" value="" />
+      <setting name="parameters" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <setting name="workingDir" value="" />
+      <setting name="focusEditor" value="false" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="REPL for project2" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false" temporary="true">
+      <option name="configVersion" value="1" />
+      <option name="displayName" value="REPL for project2" />
+      <option name="execution" value="LEININGEN" />
+      <module name="project2" />
+      <option name="options" />
+      <option name="profiles" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Local" activateToolWindowBeforeRun="false">
+      <option name="configVersion" value="1" />
+      <option name="options" />
+      <option name="profiles" />
+      <method v="2" />
+    </configuration>
+    <configuration default="true" type="ClojureREPL" factoryName="Remote" activateToolWindowBeforeRun="false">
+      <setting name="displayName" value="" />
+      <setting name="host" value="" />
+      <setting name="port" value="0" />
+      <setting name="replType" value="SOCKET" />
+      <setting name="configType" value="SPECIFY" />
+      <setting name="replPortFileType" value="STANDARD" />
+      <setting name="customPortFile" value="" />
+      <setting name="fixLineNumbers" value="false" />
+      <setting name="focusEditor" value="false" />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Clojure REPL.REPL for project2" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="a7dcf2a1-f4ad-4485-8bef-6fc5d4629246" name="Changes" comment="" />
+      <created>1695562876623</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1695562876623</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
